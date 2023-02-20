@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Feb 20 13:27:05 2023
+
+@author: sadegh
+"""
+# %%
+import numpy as np
+import pygimli as pg
+from pygimli.frameworks import Modelling, Inversion
+from pygimli.viewer.mpl import drawModel1D
+import pandas as pd
+from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib.pyplot as plt
+
+# %% import data
+farmName = 'Brodowin Hoben'
+refPoints = pd.read_csv(f'{farmName} farm_refPoints.csv', delimiter=';')
+refName = refPoints['Name'].astype(int) # refPoint names
+# meanDataNearestVector = 'meanNearestPoints.csv'
+meanNearestPoints = np.loadtxt('meanNearestPoints.csv', delimiter=';')
+data = np.loadtxt(f'{farmName} farm_data.csv', delimiter=';')
+nearestArray = pd.read_csv('nearestArray.csv', delimiter=',') # data of individual closest points
+
+# %% Forward Operator and response function
+"""VES inversion."""
+
+class VESRhoModelling(Modelling):
+    """Vertical electrical sounding (VES) modelling with fixed layers."""
+
+    def __init__(self, thk, **kwargs):
+        super().__init__()
+        self.fwd = pg.core.DC1dRhoModelling(thk, **kwargs) # kwargs: am, bm, an, bn
+        
+        mesh = pg.meshtools.createMesh1D(len(thk)+1)
+        # self.clearRegionProperties()
+        self.setMesh(mesh)
+
+    def response(self, par):
+        """Forward response."""
+        return self.fwd.response(par)
+    
+# %% ABMN, res, thk 
+# data space
+# amVec = np.arange(1, 6) * 0.5  # Geophilius 1.0 (2013)
+# amVec = np.arange(1, 7) * 0.5  # Geophilius 2.0 (2017)
+amVec = np.arange(1, 6) * 0.6  # Geophilius 3.0 (2020)
+b = 1.0
+bmVec = np.sqrt(amVec**2+b**2)
+
+# model space
+thk = np.ones(6) * 0.25
+nLayer = len(thk) + 1
+
+dataNearestMean = np.column_stack((np.array(refName, dtype = 'int'), meanNearestPoints))
+
+
+# %% Initialize the DC Forward Modelling Operator
+fop = VESRhoModelling(thk, am=amVec, an=bmVec, bm=bmVec, bn=amVec)
+
+# %% Error Model
+error = np.ones_like(amVec) * 0.03 # used in inversion
+
+# 
+# %% Inversion
+
+with PdfPages(f'{farmName} Inversion_Result_ Mean&Indiv.pdf') as pdf:
+# Inversion results for 'Mean' of closest points
+    for Data in dataNearestMean:
+        # print(Data[1])
+        # plot individual data
+        array = data
+        dist = np.sqrt((array[:,0]-Data[1])**2+(array[:,1]-Data[2])**2)
+        # dist = np.sqrt((array[:,0]-point['E'])**2+(array[:,1]-point['N'])**2)
+
+        distToRef = 15
+        nearestAray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
+        newamVec = np.tile(amVec, (len(data[nearestAray][:, 3:8]),1))
+        fig, ax = pg.plt.subplots(figsize=(8, 6), ncols=2)  # two-column figure
+
+        for indivData in data[nearestAray][:, 3:8]:
+            inv = Inversion(fop=fop) # passing the fwd operator in the inversion
+            inv.setRegularization(cType=1) # cType=0:MarquardtLevenberg damping, 10:mixe M.L. & smoothness Constraint
+            modelInd = inv.run(indivData, error, lam=10, startModel=100, verbose=True) # stating model 100 ohm.m, lam: regularization
+            drawModel1D(ax[0], thickness=thk, values=modelInd, plot='semilogx', color='lightgray', linewidth=1)
+        Rho = np.array(Data[3:8]) 
+        inv = Inversion(fop=fop) # passing the fwd operator in the inversion
+        inv.setRegularization(cType=1) # cType=0:MarquardtLevenberg damping, 10:mixe M.L. & smoothness Constraint
+        modelMean = inv.run(Rho, error, lam=10, startModel=100, verbose=True) # stating model 100 ohm.m, lam: regularization
+        print(modelMean)
+        # % Plotting Results
+        # plot model (inverted and synthetic)
+        drawModel1D(ax[0], thickness=thk, values=modelMean, plot='semilogx', color='g', zorder=20, label="mean")
+        ax[0].set_xlim([30, 30000])
+        ax[0].legend()
+
+        # ax[0].hlines([0.25, 0.5], *ax[0].get_xlim())
+        ax[1].semilogx(Rho, amVec, "+", markersize=9, mew=2, label="Mean Data")
+        ax[1].semilogx(inv.response.array(), amVec, "x", mew=2, markersize=8,label="response")
+        ax[1].invert_yaxis()
+        ax[1].set_xlim([30, 2000])
+        ax[1].grid(True) 
+        ax[1].legend()
+        ax[1].set_title(f' Inv for mean data close to reference point {Data[0]}')
+       
+      
+        # print(data[nearestAray][:, 3:8])
+        ax[1].semilogx(data[nearestAray][:, 3:8], newamVec, ".", markersize=2, label="Individual Data")
+        
+        plt.savefig(pdf, format='pdf') 
