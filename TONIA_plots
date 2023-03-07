@@ -8,22 +8,27 @@ Created on Mon Feb 20 10:15:10 2023
 #%% import liberaries
 import numpy as np
 import matplotlib.pyplot as plt
-import utm
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib
 import pygimli as pg
-import geopandas as gpd
-import fiona
-from pygimli.viewer.mpl import drawModel1D
 import pandas as pd
+import skgstat as skg
 # %% Save data as a multipage pdf 
 
 # import data
-farmName = 'Brodowin Hoben'
-data = np.loadtxt(f'{farmName} farm_data.csv', delimiter=';')
+# filepath = 'BDW_Hoben_Geophilus_221020_roh.csv' 
+# farmName = 'Brodowin Hoben'
+
+filepath = 'Beerfelde Banane farm_data.csv' 
+farmName = 'Beerfelde Banane'
+
+# filepath = 'TRB_Wertheim_Geophilus_roh_221125.csv'
+# farmName = 'Trebbin Wertheim'
+
+data = np.loadtxt(f'{farmName} farm_data.csv', delimiter=',')
 Eutm, Nutm, H, Gamma = data[:,0] , data[:,1], data[:,2], data[:,8]
 Rho1, Rho2, Rho3, Rho4, Rho6 = data[:, 3],data[:, 4],data[:, 5],data[:, 6],data[:, 7]
-refPoints = pd.read_csv(f'{farmName} farm_refPoints.csv', delimiter=';')
+refPoints = pd.read_csv(f'{farmName} farm_refPoints.csv', delimiter=',')
 refEutm, refNutm = refPoints['E'] , refPoints['N']
 RhoData = data[:, 3:8]
 
@@ -41,7 +46,6 @@ with PdfPages(f'{farmName} mapped-data-multipage_pdf_.pdf') as pdf:
     plt.xticks(rotation=45, ha='right')
     plt.axis("equal")
     pg.viewer.mpl.underlayBKGMap(ax, mode='DOP', utmzone=33, epsg=0, uuid='8102b4d5-7fdb-a6a0-d710-890a1caab5c3', usetls=False, origin=None) 
-    # plt.savefig(f'Digital-Orthophoto {farmName} farm.png', dpi=200)
     plt.savefig(pdf, format='pdf') 
             
     # Elevation  map
@@ -56,9 +60,6 @@ with PdfPages(f'{farmName} mapped-data-multipage_pdf_.pdf') as pdf:
     plt.ylabel('Northing [m]')
     plt.yticks(rotation=45, ha='right')
     plt.xticks(rotation=45, ha='right')
-    # plt.savefig(f'{farmName} farm - Elevation.png', dpi=200)
-    # plt.savefig(f'{farmName} farm - Elevation.pdf')
-
     plt.savefig(pdf, format='pdf') 
     
     # Gamma map
@@ -73,9 +74,6 @@ with PdfPages(f'{farmName} mapped-data-multipage_pdf_.pdf') as pdf:
     plt.ylabel('Northing [m]')
     plt.xticks(rotation=45, ha='right')    
     plt.yticks(rotation=45, ha='right')
-    # plt.savefig(f'{farmName} farm - Gamma.png', dpi=200)
-    # plt.savefig(f'{farmName} farm - Gamma.pdf')
-
     plt.savefig(pdf, format='pdf')     
     
     # Rho maps
@@ -99,9 +97,6 @@ with PdfPages(f'{farmName} mapped-data-multipage_pdf_.pdf') as pdf:
         for i, txt in enumerate(refName):
             plt.annotate(txt, (refEutm[i], refNutm[i]), fontsize=7)
             plt.legend(loc="upper left")
-
-        # plt.savefig(f'{farmName} farm - Rho{Rho_i}.png', dpi=200)
-        # plt.savefig(f'{farmName} farm - Rho{Rho_i}.pdf')
         plt.savefig(pdf, format='pdf')   
     
     # histogram of data distribution (log)
@@ -122,37 +117,38 @@ with PdfPages(f'{farmName} mapped-data-multipage_pdf_.pdf') as pdf:
         plt.xlabel('log Resistivity')
         plt.subplots_adjust(left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0.25, hspace=0.4)
         plt.grid()
-        # plt.ylabel('Data frequency')
-        # plt.savefig(f'{farmName} farm - hist {Rho_i}.png', dpi=200)
-        # plt.savefig(f'{farmName} farm - hist {Rho_i}.pdf') 
         c=c+1
 
-    plt.savefig(pdf, format='pdf') 
-        # Axes.set_adjustable({'box', 'datalim'}, share=True)
-        
+    plt.savefig(pdf, format='pdf')       
 # %% Find nearest dataPoints to refPoints
 meanDataVal =[]
 refpoints = f'{farmName} farm_refPoints.csv'
-RefPoints = pd.read_csv(refpoints, delimiter=";")
+RefPoints = pd.read_csv(refpoints, delimiter=",")
 
+# distToRef = 9
 with PdfPages(f'{farmName} DataDistNearestPoints.pdf') as pdf:
     for i , point in RefPoints.iterrows():
         array = data
         dist = np.sqrt((array[:,0]-point['E'])**2+(array[:,1]-point['N'])**2)
-
-        distToRef = 15
-        nearestArray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
+        dist_index = np.argmin(dist)
+        nearestArray = np.arange(dist_index-5, dist_index+5)
+        # nearestArray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
         dataNearest = data[nearestArray]   # data of individual closest points
         
-        fig, ((ax1,ax2,a3), (ax4,ax5, ax6)) = plt.subplots(2, 3, figsize=(15, 10))
+        fig, ((ax1,ax2,ax3), (ax4,ax5, ax6)) = plt.subplots(2, 3, figsize=(15, 10))
         ax1.semilogy(Rho1[nearestArray], marker='.', label='Rho1')
         ax1.set_title('Rho1')
         ax1.grid()
-        fig.suptitle(f'Data distribution of points closer than {distToRef}m to refrence point {point[0]}', fontsize=16)
+        fig.suptitle(f'Data distribution of closer points to refrence point {point[0]} - {farmName} - {farmName}', fontsize=16)
 
         ax2.semilogy(Rho2[nearestArray], linestyle=None, marker='.', label='Rho2')
         ax2.set_title('Rho2')
         ax2.grid()
+        
+        ax3.plot(Eutm[nearestArray], Nutm[nearestArray], "x", markersize=8, mew=2, label='Nearest Points')
+        ax3.plot(point[1], point[2], "o", markersize=8, mew=2, label='Reference Point')
+        ax3.set_title('Points´ location')
+        ax3.legend(prop={'size': 8})
         
         ax4.semilogy(Rho3[nearestArray], linestyle=None, marker='.', label='Rho3')
         ax4.set_title('Rho3')
@@ -165,32 +161,20 @@ with PdfPages(f'{farmName} DataDistNearestPoints.pdf') as pdf:
         ax6.semilogy(Rho6[nearestArray], linestyle=None, marker='.', label='Rho6')
         ax6.set_title('Rho6')
         ax6.grid()
-        
-        # ax3.plot(Eutm[nearestAray], Nutm[nearestAray], "x", label='Nearest Points')
-        # ax3.plot(point[1], point[2], "o", label=f'Reference Point {point[0]}')
-        # ax3.set_title('Nearest points location')
-    
+            
         plt.savefig(pdf, format='pdf') 
 
-        # fig2, ax = plt.subplots()
-        # matplotlib.pyplot.legend()
-        # ax.plot(Eutm[nearestAray], Nutm[nearestAray], "x", label='Nearest Points')
-        # ax.plot(point[1], point[2], "o", label=f'Reference Point {point[0]}')
-        # ax.axis('equal')
-        # leg = ax.legend();
 #%% Histogram of Rho in the nearest points 
 with PdfPages(f'{farmName} DataHistogramNearestPoints.pdf') as pdf:
     for i , point in RefPoints.iterrows():
         array = data
         dist = np.sqrt((array[:,0]-point['E'])**2+(array[:,1]-point['N'])**2)
-        distToRef = 15
-        nearestAray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
-        Data_NearestPoints = np.column_stack(((Eutm[nearestAray]), (Nutm[nearestAray]), \
-                                  (Rho1[nearestAray]), (Rho2[nearestAray]), \
-                                  (Rho3[nearestAray]), (Rho4[nearestAray]), \
-                                  (Rho6[nearestAray]), 
-                                  (Gamma[nearestAray]))) 
-        # print(point[0], nearestAray.shape, Data_NearestPoints)
+        nearestArray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
+        Data_NearestPoints = np.column_stack(((Eutm[nearestArray]), (Nutm[nearestArray]), \
+                                  (Rho1[nearestArray]), (Rho2[nearestArray]), \
+                                  (Rho3[nearestArray]), (Rho4[nearestArray]), \
+                                  (Rho6[nearestArray]), 
+                                  (Gamma[nearestArray]))) 
           
         Rho_Nearest = Data_NearestPoints[:, 2:7] # Rho of individual closest points
         num_bins = 25
@@ -208,13 +192,26 @@ with PdfPages(f'{farmName} DataHistogramNearestPoints.pdf') as pdf:
             counts, bins = np.histogram(np.log10(Rhoi), bins=num_bins)
             ax3 = plt.stairs(counts, bins)
             ax4 = plt.hist(bins[:-1], bins, weights=counts, alpha=0.7)
-            plt.suptitle(f'Distribution of the Nearest Data to refrence point {point[0]}- {farmName} farm', fontsize=15, y=0.98)
+            plt.suptitle(f'Distribution of the Nearest Data to refrence point {point[0]}- {farmName} farm', fontsize=13, y=0.98)
             plt.title(f'Rho{Rho_i}', fontsize=12)
             # plt.xlabel('log Resistivity')
             plt.subplots_adjust(left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0.25, hspace=0.7)
-            # plt.text(1, -1.5, ('mean = ', np.round(np.mean(Rhoi),2)), fontsize=8)    
-            # plt.text(1, -2.5, (' std  = ', np.round(np.std(Rhoi),2)), fontsize=8)    
             plt.grid()
             c=c+1
            
+        plt.savefig(pdf, format='pdf') 
+# %%
+"""Experimental variograms."""
+with PdfPages(f'{farmName}_variograms.pdf') as pdf:
+    
+    Rho = np.column_stack((Rho1, Rho2, Rho3, Rho4, Rho6))
+    for rho in range(Rho.shape[1]):
+        rho_i = rho+1
+        rhoi =Rho[:,rho]    
+        coords = np.column_stack((Eutm, Nutm))
+        V = skg.Variogram(coords, np.log(rhoi),
+                          n_lags=30, maxlag=500, model="exponential")
+        print(V)
+        fig = V.plot()
+        
         plt.savefig(pdf, format='pdf') 
