@@ -16,19 +16,16 @@ import skgstat as skg
 # %% Save data as a multipage pdf 
 
 # import data
-# filepath = 'BDW_Hoben_Geophilus_221020_roh.csv' 
-# farmName = 'Brodowin Hoben'
-
-filepath = 'Beerfelde Banane farm_data.csv' 
-farmName = 'Beerfelde Banane'
-
 # filepath = 'TRB_Wertheim_Geophilus_roh_221125.csv'
 # farmName = 'Trebbin Wertheim'
 
-data = np.loadtxt(f'{farmName} farm_data.csv', delimiter=',')
+filepath = 'TRB_Wertheim_Geophilus_roh_221125.csv'
+farmName = 'Trebbin Wertheim'
+
+data = np.loadtxt(f'{farmName} farm_data.csv', delimiter=';')
 Eutm, Nutm, H, Gamma = data[:,0] , data[:,1], data[:,2], data[:,8]
 Rho1, Rho2, Rho3, Rho4, Rho6 = data[:, 3],data[:, 4],data[:, 5],data[:, 6],data[:, 7]
-refPoints = pd.read_csv(f'{farmName} farm_refPoints.csv', delimiter=',')
+refPoints = pd.read_csv(f'{farmName} farm_refPoints.csv', delimiter=';')
 refEutm, refNutm = refPoints['E'] , refPoints['N']
 RhoData = data[:, 3:8]
 
@@ -45,7 +42,7 @@ with PdfPages(f'{farmName} mapped-data-multipage_pdf_.pdf') as pdf:
     plt.yticks(rotation=45, ha='right')
     plt.xticks(rotation=45, ha='right')
     plt.axis("equal")
-    pg.viewer.mpl.underlayBKGMap(ax, mode='DOP', utmzone=33, epsg=0, uuid='8102b4d5-7fdb-a6a0-d710-890a1caab5c3', usetls=False, origin=None) 
+    # pg.viewer.mpl.underlayBKGMap(ax, mode='DOP', utmzone=33, epsg=0, uuid='8102b4d5-7fdb-a6a0-d710-890a1caab5c3', usetls=False, origin=None) 
     plt.savefig(pdf, format='pdf') 
             
     # Elevation  map
@@ -123,23 +120,26 @@ with PdfPages(f'{farmName} mapped-data-multipage_pdf_.pdf') as pdf:
 # %% Find nearest dataPoints to refPoints
 meanDataVal =[]
 refpoints = f'{farmName} farm_refPoints.csv'
-RefPoints = pd.read_csv(refpoints, delimiter=",")
+RefPoints = pd.read_csv(refpoints, delimiter=";")
 
-# distToRef = 9
+# distToRef = 8
+    
 with PdfPages(f'{farmName} DataDistNearestPoints.pdf') as pdf:
     for i , point in RefPoints.iterrows():
         array = data
         dist = np.sqrt((array[:,0]-point['E'])**2+(array[:,1]-point['N'])**2)
+
+        # nearestArray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
+        
         dist_index = np.argmin(dist)
         nearestArray = np.arange(dist_index-5, dist_index+5)
-        # nearestArray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
         dataNearest = data[nearestArray]   # data of individual closest points
         
         fig, ((ax1,ax2,ax3), (ax4,ax5, ax6)) = plt.subplots(2, 3, figsize=(15, 10))
         ax1.semilogy(Rho1[nearestArray], marker='.', label='Rho1')
         ax1.set_title('Rho1')
         ax1.grid()
-        fig.suptitle(f'Data distribution of closer points to refrence point {point[0]} - {farmName} - {farmName}', fontsize=16)
+        fig.suptitle(f'Data distribution of closer points to refrence point {point[0]} - {farmName}', fontsize=16)
 
         ax2.semilogy(Rho2[nearestArray], linestyle=None, marker='.', label='Rho2')
         ax2.set_title('Rho2')
@@ -147,6 +147,7 @@ with PdfPages(f'{farmName} DataDistNearestPoints.pdf') as pdf:
         
         ax3.plot(Eutm[nearestArray], Nutm[nearestArray], "x", markersize=8, mew=2, label='Nearest Points')
         ax3.plot(point[1], point[2], "o", markersize=8, mew=2, label='Reference Point')
+        ax3.axis("equal")
         ax3.set_title('Points´ location')
         ax3.legend(prop={'size': 8})
         
@@ -163,18 +164,54 @@ with PdfPages(f'{farmName} DataDistNearestPoints.pdf') as pdf:
         ax6.grid()
             
         plt.savefig(pdf, format='pdf') 
+# %%   
+    
+with PdfPages(f'{farmName} RhoaDistNearestPoints.pdf') as pdf:
+    for i , point in RefPoints.iterrows():
+        array = data
+        dist = np.sqrt((array[:,0]-point['E'])**2+(array[:,1]-point['N'])**2)   
+        dist_index = np.argmin(dist)
+        nearestArray = np.arange(dist_index-5, dist_index+5)
+        dataNearest = data[nearestArray]   # data of individual closest points
+        
+        fig, ((ax1), (ax2)) = plt.subplots(2, 1, figsize=(9.5, 10))
+        fig.suptitle(f'Rhoa distribution of closer points to refrence point {point[0]} - {farmName}', fontsize=16)
+        
+        ax1.plot(Eutm[nearestArray], Nutm[nearestArray], "x", markersize=8, mew=2, label='Nearest Points')
+        ax1.plot(point[1], point[2], "o", markersize=8, mew=2, label='Reference Point')
+        ax1.axis("equal")
+        ax1.set_title('Points´ location', fontweight='bold')
+        ax1.legend(prop={'size': 8})
+        
+        matrixRho = np.vstack([Rho1[nearestArray],Rho2[nearestArray],Rho3[nearestArray],Rho4[nearestArray],Rho6[nearestArray]])
+        mat=ax2.matshow(matrixRho, cmap=plt.cm.Blues, vmin=np.min(matrixRho), vmax=np.max(matrixRho))
+        ax2.axis("equal")
+        ax2.set_title('Rhoa' , fontweight='bold')
+        clb = plt.colorbar(mat)
+        # clb = fig.colorbar()
+        clb.ax.set_title('(ohm.m)',fontsize=10)
+        plt.xlabel('Points', fontsize=10)
+        plt.ylabel('layers', fontsize=10)
+        plt.xticks(ticks=np.arange(len(matrixRho[0])))
+        plt.yticks(ticks=np.arange(len(matrixRho)))
+        plt.xlim(0,9)
+               
+        fig.tight_layout(pad=3.0)
+        plt.savefig(pdf, format='pdf') 
+# %%   
 
-#%% Histogram of Rho in the nearest points 
 with PdfPages(f'{farmName} DataHistogramNearestPoints.pdf') as pdf:
     for i , point in RefPoints.iterrows():
         array = data
         dist = np.sqrt((array[:,0]-point['E'])**2+(array[:,1]-point['N'])**2)
-        nearestArray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
-        Data_NearestPoints = np.column_stack(((Eutm[nearestArray]), (Nutm[nearestArray]), \
-                                  (Rho1[nearestArray]), (Rho2[nearestArray]), \
-                                  (Rho3[nearestArray]), (Rho4[nearestArray]), \
-                                  (Rho6[nearestArray]), 
-                                  (Gamma[nearestArray]))) 
+        # nearestArray = np.nonzero(dist<distToRef)[0] # return indices of the elements that are non-zero
+        dist_idx = np.argmin(dist)
+        nearestArrays = np.arange(dist_idx-5, dist_idx+5)
+        Data_NearestPoints = np.column_stack(((Eutm[nearestArrays]), (Nutm[nearestArrays]), \
+                                  (Rho1[nearestArrays]), (Rho2[nearestArrays]), \
+                                  (Rho3[nearestArrays]), (Rho4[nearestArrays]), \
+                                  (Rho6[nearestArrays]), 
+                                  (Gamma[nearestArrays]))) 
           
         Rho_Nearest = Data_NearestPoints[:, 2:7] # Rho of individual closest points
         num_bins = 25
