@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="BFD_Fettke_Referenzpunkte_gemessen" id="BFD_Fettke_Referenzpunkte_gemessen">
+	<SimpleField name="Code" type="string"></SimpleField>
+	<SimpleField name="Northing" type="float"></SimpleField>
+	<SimpleField name="Easting" type="float"></SimpleField>
+	<SimpleField name="Elevation" type="float"></SimpleField>
+</Schema>
+<Folder><name>BFD_Fettke_Referenzpunkte_gemessen</name>
+  <Placemark>
+	<name>326</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806615.87597</SimpleData>
+		<SimpleData name="Easting">436033.26380</SimpleData>
+		<SimpleData name="Elevation">65.06697</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0596850385747,52.4060332916046,65.0669749552711</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>323</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806478.57865</SimpleData>
+		<SimpleData name="Easting">435817.47380</SimpleData>
+		<SimpleData name="Elevation">63.40270</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0565397099094,52.4047738408803,63.4027029731518</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>322</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806338.95562</SimpleData>
+		<SimpleData name="Easting">435643.20810</SimpleData>
+		<SimpleData name="Elevation">60.75266</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0540052927333,52.4034982859778,60.752657942832</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>321</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806294.18802</SimpleData>
+		<SimpleData name="Easting">435589.91492</SimpleData>
+		<SimpleData name="Elevation">55.94430</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0532306557221,52.4030895948136,55.9443037402301</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>328</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806754.74251</SimpleData>
+		<SimpleData name="Easting">436130.10401</SimpleData>
+		<SimpleData name="Elevation">64.50779</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0610818834313,52.4072928929953,64.5077856493727</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>324</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806483.13883</SimpleData>
+		<SimpleData name="Easting">435920.14112</SimpleData>
+		<SimpleData name="Elevation">63.77692</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0580477880905,52.404826865287,63.7769155456086</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>325</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806516.81931</SimpleData>
+		<SimpleData name="Easting">435959.49487</SimpleData>
+		<SimpleData name="Elevation">63.75113</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0586197452362,52.4051342303715,63.7511273176251</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>327</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806697.00355</SimpleData>
+		<SimpleData name="Easting">436183.02605</SimpleData>
+		<SimpleData name="Elevation">65.69011</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0618707608178,52.4067800451733,65.6901086051931</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>329</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806767.59072</SimpleData>
+		<SimpleData name="Easting">436254.28332</SimpleData>
+		<SimpleData name="Elevation">66.53176</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0629046659172,52.4074228687485,66.5317593528659</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>3210</name>
+	<ExtendedData><SchemaData schemaUrl="#BFD_Fettke_Referenzpunkte_gemessen">
+		<SimpleData name="Northing">5806796.80743</SimpleData>
+		<SimpleData name="Easting">436301.08677</SimpleData>
+		<SimpleData name="Elevation">65.25815</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>14.0635870394166,52.4076909524747,65.2581528511463</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
