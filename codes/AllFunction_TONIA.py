@@ -766,6 +766,87 @@ data_file = "Beerfelde 2022_10_21-original.csv"
 farmName = 'Beerfelde Fettke'
 plot_combined_subplots(data_file, filepath_Processed, farmName)
 
+# %%
+
+
+
+
+
+
+# %% Find nearest dataPoints to refPoints
+f'{farmName} farm_reference_Points.csv'
+import numpy as np
+import pandas as pd
+
+def find_nearest_points(farmName, data):
+    refpoints = f'{farmName} farm_reference_Points.csv'
+    RefPoints = pd.read_csv(refpoints, delimiter=";")
+
+    nearest_points_list = []
+
+    for point in RefPoints.itertuples():
+        array = data
+        dist = np.sqrt((array[:, 0] - point[2]) ** 2 + (array[:, 1] - point[3]) ** 2)
+        dist_index = np.argmin(dist)
+        nearestArray = np.arange(dist_index - 5, dist_index + 5)
+
+        data_nearest = array[nearestArray]   # data of individual closest points
+        nearest_points_list.append(data_nearest)
+
+    return nearest_points_list, RefPoints
+
+def mean_nearest_points(nearest_points_list):
+    meanDataVal = []
+    nan_reference_points = []  # List to store indices of reference points with NaN mean values
+
+    for i, data_nearest in enumerate(nearest_points_list):
+        # Process data
+        Eutm, Nutm, Rho1, Rho2, Rho3, Rho4, Rho5 = data_nearest[:, [0, 1, 3, 4, 5, 6, 7]].T
+
+        # Check if any of the mean values is NaN
+        if np.any(np.isnan([np.nanmean(Eutm), np.nanmean(Nutm), np.nanmean(Rho1), 
+                            np.nanmean(Rho2), np.nanmean(Rho3), np.nanmean(Rho4), 
+                            np.nanmean(Rho5)])):
+            nan_reference_points.append(i)  # Store the index of the reference point with NaN mean values
+
+        MeanOfNearestPoints = np.column_stack((np.nanmean(Eutm), np.nanmean(Nutm), \
+                                               np.nanmean(Rho1), np.nanmean(Rho2), \
+                                               np.nanmean(Rho3), np.nanmean(Rho4), \
+                                               np.nanmean(Rho5)
+                                              ))        
+        meanDataVal.append(MeanOfNearestPoints)
+
+    return np.array(meanDataVal), nan_reference_points
+
+
+#  Find ref points and their mean values
+spacing_labels = ['Spacing 1', 'Spacing 2', 'Spacing 3', 'Spacing 4', 'Spacing 5']
+harmfit_file = np.genfromtxt( f"Combined_harmfit_array_{farmName}.txt", delimiter='\t', skip_header=1)
+nearestPoints, refPoints = find_nearest_points(farmName, harmfit_file)
+mean_nearest_p, nan_reference_points = mean_nearest_points(nearestPoints)
+mean_nearest_p_array = mean_nearest_p.reshape(-1, mean_nearest_p.shape[-1])
+
+if len(nan_reference_points) == len(refPoints):
+    # If all reference points have NaN mean values
+    print(f"For all reference points, there are no accepted data nearby for inversion.")
+else:
+    # Store the reference points with NaN mean values to a CSV file
+    nan_reference_points_df = refPoints.iloc[nan_reference_points]
+    nan_reference_points_df.to_csv(f'{farmName}-nanReferencePoints.csv', index=False, sep=';')
+
+    # Print the reference points with NaN mean values
+    print(f"For these reference points, there are no accepted data nearby for inversion:")
+    print(nan_reference_points_df)
+    
+# Remove reference points with NaN mean values from refPoints DataFrame
+refPoints_cleaned = refPoints.drop(nan_reference_points, axis=0)
+
+# Save the mean data of nearest points to a CSV file without NaN rows
+header = ['Eutm', 'Nutm', 'Rho1', 'Rho2', 'Rho3', 'Rho4', 'Rho6']
+np.savetxt(f'meanNearestPoints-noNaN - {farmName}.txt', mean_nearest_p_array[~np.any(np.isnan(mean_nearest_p_array), axis=1)], delimiter=';', header=';'.join(header), fmt='%.6f')
+
+# Save the original mean data of nearest points to another CSV file with NaN rows
+np.savetxt(f'meanNearestPoints-withNaN- {farmName}.txt', mean_nearest_p_array, delimiter=';', header=';'.join(header), fmt='%.6f')
 
 
 
@@ -775,18 +856,393 @@ plot_combined_subplots(data_file, filepath_Processed, farmName)
 
 
 
+# %% import data for inversion
+import pandas as pd
+
+refPoints = pd.read_csv(f'{farmName} farm_reference_Points.csv', delimiter=';')
+# refName = refPoints_cleaned['Name'].astype(int) # refPoint names
+refName = refPoints['Name'].astype(int) # refPoint names
+#meanNearestPoints_harmfit_on_IF = np.loadtxt(f'meanNearestPoints-noNaN - {farmName}.txt', delimiter=';') 
+meanNearestPoints_harmfit_on_IF = np.loadtxt(f'meanNearestPoints-withNaN- {farmName}.txt', delimiter=';') 
+#meanNearestPoints_processed = np.loadtxt(f'{farmName}-meanNearestPoints_processed.csv', delimiter=';')
+#data_O = np.loadtxt(f'{farmName_original} farm_data.csv', delimiter=';')
+#harmfit_data = np.loadtxt(f"Combined_harmfit_array_{farmName}.txt", delimiter='\t', skiprows=1)
+harmfit_data = np.genfromtxt(f"Combined_harmfit_array_{farmName}.txt", delimiter='\t', skip_header=1)
+
+#nearestArray_harmfit = pd.read_csv(f'{farmName}-nearestArray_harmfit.csv', delimiter=',') # data of individual closest points
+#nearestArray_processed = pd.read_csv(f'{farmName}-nearestArray_processed.csv', delimiter=',') # data of individual closest points
+# %% filter_acceptable_refpoints (Unacceptables have only NAN values in their vicinit)
+import pandas as pd
+
+def filter_acceptable_refpoints(refpoints_file, unacceptable_refpoints_file):
+    # Read the reference points and unacceptable reference points CSV files
+    RefPoints = pd.read_csv(refpoints_file, delimiter=";")
+    unacceptable_RefPoints = pd.read_csv(unacceptable_refpoints_file, delimiter=";")
+
+    # Extract the column name of the reference points from the DataFrame
+    refpoint_column_name = RefPoints.columns[0]
+
+    # Extract the column name of the unacceptable reference points from the DataFrame
+    unacceptable_refpoint_column_name = unacceptable_RefPoints.columns[0]
+
+    # Create a list of unacceptable reference points
+    unacceptable_points_list = unacceptable_RefPoints[unacceptable_refpoint_column_name].tolist()
+
+    # Filter out the acceptable reference points by removing the unacceptable ones
+    acceptable_refpoints = RefPoints[~RefPoints[refpoint_column_name].isin(unacceptable_points_list)]
+
+    # Get the E and N coordinates of unacceptable reference points
+    unacceptable_refpoints_coords = RefPoints[RefPoints[refpoint_column_name].isin(unacceptable_points_list)]
+    
+    # Concatenate acceptable and unacceptable reference points
+    all_refpoints = RefPoints
+
+
+    return acceptable_refpoints, unacceptable_refpoints_coords, all_refpoints
+
+refpoints_file = f'{farmName} farm_reference_Points.csv'
+unacceptable_refpoints_file = f'{farmName}-nanReferencePoints.csv'
+
+acceptable_refpoints, unacceptable_refpoints, all_refpoints = filter_acceptable_refpoints(refpoints_file, unacceptable_refpoints_file)
+
+print("Acceptable Reference Points:")
+print(acceptable_refpoints)
+
+print("\nUnacceptable Reference Points:")
+print(unacceptable_refpoints)
+
+print("\nAll Reference Points:")
+print(all_refpoints)
+# %% Forward Operator and response function
+from pygimli.frameworks import Modelling, Inversion
+from pygimli.viewer.mpl import drawModel1D
+import pygimli as pg
+
+"""VES inversion."""
+
+class VESRhoModelling(Modelling):
+    """Vertical electrical sounding (VES) modelling with fixed layers."""
+
+    def __init__(self, thk, **kwargs):
+        super().__init__()
+        self.fwd = pg.core.DC1dRhoModelling(thk, **kwargs) # kwargs: am, bm, an, bn
+        
+        mesh = pg.meshtools.createMesh1D(len(thk)+1)
+        # self.clearRegionProperties()
+        self.setMesh(mesh)
+
+    def response(self, par):
+        """Forward response."""
+        return self.fwd.response(par)
+
+# %% ABMN, res, thk 
+# data space
+# amVec = np.arange(1, 6) * 0.5  # Geophilius 1.0 (2013)
+# amVec = np.arange(1, 7) * 0.5  # Geophilius 2.0 (2017)
+amVec = np.arange(1, 6) * 0.6  # Geophilius 3.0 (2020)
+# amVec = np.arange(1, 7) * 0.5  # Geophilius 2.0 (2023) # uses for Original data
+
+b = 1.0
+bmVec = np.sqrt(amVec**2+b**2)
+
+# model space
+thk = np.ones(15) * 0.1
+nLayer = len(thk) + 1
+
+dataNearestMean_harmfit_on_IF = np.column_stack((np.array(refName, dtype='int'), meanNearestPoints_harmfit_on_IF))
+
+# %% Initialize the DC Forward Modelling Operator
+fop = VESRhoModelling(thk, am=amVec, an=bmVec, bm=bmVec, bn=amVec)
+#%% Error Model
+error = np.ones_like(amVec) * 0.03 # used in inversion
+# error = np.ones_like(np.arange(1, numSpacing+1)) * 0.03 # used in inversion
+error_replaced = np.copy(error)  # Create a copy of the original error array
+# error_replaced[dataNearestMean_harmfit_on_IF == 1000] = 10000  # Replace specific error values with 10000
+# make a copy of the mean-data to replace NaN values with 1000 
+data_with_replacement = np.copy(dataNearestMean_harmfit_on_IF)
+
+#%%  Error Model
+
+# Create a new error vector with the same size as data_with_replacement[:, 3:8]
+error_replaced_mean = np.ones_like(data_with_replacement[:, 3:8]) * 0.03
+error_replaced_individual = np.ones_like(data_with_replacement[:, 3:8]) * 0.03
+
+# Replace NaN values with 1000 in the mean-data
+data_with_replacement[np.isnan(data_with_replacement)] = 1000
+
+# Identify the indices where data is replaced with 1000
+indices_to_replace_mean = np.where(data_with_replacement[:, 3:8] == 1000)
+#indices_to_replace_individual = np.where(data_with_replacement[:, 3:8] == 1000)
+
+# Set error to 10000 for replaced values in both vectors
+error_replaced_mean[indices_to_replace_mean] = 10000
+#error_replaced_individual[indices_to_replace_individual] = 10000
+
+# %% Inversion (For Nearest Points to Reference-Point) test
+       
+harmfit_data = np.genfromtxt(f"Combined_harmfit_array_{farmName}.txt", delimiter='\t', skip_header=1)
+
+# Load data from the 'harmfitted_isolation_forest_data' array
+data = harmfit_data
+
+# Extract the Easting and Northing columns from the data
+Eutm, Nutm = data[:, 0], data[:, 1]
+
+# Extract the resistivity values (Rho) for different spacings from the data
+Rho1, Rho2, Rho3, Rho4, Rho5 = data[:, 3], data[:, 4], data[:, 5], data[:, 6], data[:, 7]
+
+# Initialize empty lists to store the inversion results
+StmodelsMean = []   # Stores the mean inversion models for each reference point
+chi2Vec_mean = []   # Stores the chi-square values for the mean inversion of each reference point
+chi2Vec_indiv = []  # Stores the chi-square values for the individual inversions of each reference point
+chi2_indiv = []     # Stores the individual inversion models for each reference point
+
+num_valid_points_list = []  # List to store the number of valid points for each reference point
+skipped_points_list = []    # List to store the skipped points for each reference point
+
+
+# Inversion of individual nearest points
+for j, Data in enumerate(dataNearestMean_harmfit_on_IF):
+    array = data
+    dist = np.sqrt((array[:, 0] - Data[1])**2 + (array[:, 1] - Data[2])**2)
+    dist_index = np.argmin(dist)
+    nearestArray = np.arange(dist_index - 5, dist_index + 5)
+    mydata = data[nearestArray][:, 3:8]
+    chi2Vec_indiv = []
+    Stmodels = []
+    skipped_points = []  # Create an empty list to keep track of skipped points
+    
+    
+    # Create an error matrix for individual data
+    error_replaced_individual = np.ones_like(mydata) * 0.03
+    # Replace NaN values with 1000
+    mydata[np.isnan(mydata)] = 1000
+    # Identify the indices where data is replaced with 1000
+    indices_to_replace_individual = np.where(mydata == 1000)
+    # Set error to 10000 for replaced values in both vectors
+    error_replaced_individual[indices_to_replace_individual] = 10000
+    
+
+    # Inversion of individual nearest points
+    for i, indivData in enumerate(mydata):
+        #print(indivData, error_replaced_individual[i,:])
+        if not np.isnan(indivData).any():
+            # Check if indivData contains NaN values
+            inv_indiv = Inversion(fop=fop)  # Passing the fwd operator in the inversion
+            inv_indiv.setRegularization(cType=1)  # cType=0:MarquardtLevenberg damping, 10:mixe M.L. & smoothness Constraint
+            modelInd = inv_indiv.run(indivData, error_replaced_individual[i,:], lam=20, lambdaFactor=0.9, startModel=300, verbose=True)  # Stating model 100 ohm.m, lam: regularization
+            Stmodels.append(modelInd)
+            np.savetxt(f'{farmName}_InvResultIndividualPoints_{j}th_point.csv', Stmodels, delimiter=';', fmt='%s')
+            chi2 = inv_indiv.inv.chi2()
+            chi2Vec_indiv.append(chi2)
+        else:
+            skipped_points.append(nearestArray[i])  # Add the index of the skipped point to the list
+    chi2_indiv.append(np.array(chi2Vec_indiv))
+    
+    #chi2_indiv_array = np.array(chi2_indiv)
+    np.savetxt(f'{farmName}_chi2_indiv.csv', chi2_indiv, delimiter=';', fmt='%s')
+
+    num_valid_points = len(nearestArray) - len(skipped_points)
+    num_valid_points_list.append(num_valid_points)
+
+    if skipped_points:
+        print(f'Skipped inversion for points with indices: {skipped_points}')
+        skipped_points_list.append(skipped_points)
+
+    # inversion of mean of the nearest points
+    Rho = np.array(Data[3:8])
+    #print(Rho)
+    inv_mean = Inversion(fop=fop) # passing the fwd operator in the inversion
+    inv_mean.setRegularization(cType=1) # cType=0:MarquardtLevenberg damping, 10:mixe M.L. & smoothness Constraint
+    
+    # Create an error matrix for mean data
+    error_replaced_mean = np.ones_like(Rho) * 0.03
+    # Replace NaN values with 1000
+    Rho[np.isnan(Rho)] = 1000
+    # Identify the indices where data is replaced with 1000
+    indices_to_replace_mean = np.where(Rho == 1000)
+    # Set error to 10000 for replaced values in both vectors
+    error_replaced_mean[indices_to_replace_mean] = 10000
+    
+    print(Rho, error_replaced_mean)
+    
+    modelMean = inv_mean.run(Rho, error_replaced_mean, lam=20, lambdaFactor=0.9, startModel=300, verbose=True) # stating model 100 ohm.m, lam: regularization
+    invMeanResponse = inv_mean.response.array()
+    StmodelsMean.append(modelMean)
+    np.savetxt(f'{farmName}_InvResultMeanPoints.csv', StmodelsMean, delimiter=';', fmt='%s')
+    np.savetxt(f'{farmName}_invMeanResponse_{j}th point.csv', invMeanResponse, delimiter=';', fmt='%s')
+    chi2_m = inv_mean.inv.chi2()
+    chi2Vec_mean.append(chi2_m)
+    np.savetxt(f'{farmName}_chi2_mean.csv', chi2Vec_mean, delimiter=';', fmt='%s')
+
+
+# Print the information about the number of valid points and skipped points for each reference point
+for i, Data in enumerate(dataNearestMean_harmfit_on_IF):
+    print(f'Reference point {int(Data[0])}:')
+    print(f'Number of valid points for inversion: {num_valid_points_list[i]}')
+    if skipped_points_list[i]:
+        print(f'Skipped inversion for points with indices: {skipped_points_list[i]}')
+    print()
+
+
+# %%  plots for Nearest points to Reference Points
+import matplotlib as mpl
+from matplotlib.ticker import FormatStrFormatter
+import matplotlib.colors as colors
+
+# Inversion results for 'Mean' of closest points
+## importing chi2 for the plots
+chi2VecIndiv = pd.read_csv(f'{farmName}_chi2_indiv.csv', delimiter=';', header=None)
+chi2VecMean = pd.read_csv(f'{farmName}_chi2_mean.csv', delimiter=';', header=None)
+# Convert chi2VecIndiv DataFrame to a NumPy array
+chi2Indiv = np.array(chi2VecIndiv)
+# Convert chi2VecMean DataFrame to a NumPy array
+chi2Mean = np.array(chi2VecMean)
+
+# # Find the maximum row length in chi2_indiv
+# max_row_length = max(len(row) for row in chi2Indiv)
+
+# # Create a new n by n array filled with zeros
+# n_by_n_chi2_indiv = np.zeros((len(chi2_indiv), max_row_length))
+
+# # Fill the new array with rows from chi2_indiv
+# for i, row in enumerate(chi2_indiv):
+#     n_by_n_chi2_indiv[i, :len(row)] = row
+
+
+# # Save the new array to a CSV file
+# np.savetxt(f'{farmName}_chi2_indiv_NbyN.csv', n_by_n_chi2_indiv, delimiter=';', fmt='%.4f')
+
+
+# Load data from the 'harmfitted_isolation_forest_data' array
+harmfit_data = np.genfromtxt(f"Combined_harmfit_array_{farmName}.txt", delimiter='\t', skip_header=1)
+data = harmfit_data
+
+with PdfPages(f'{farmName} Inversion_Result_ Mean&Indiv.pdf') as pdf:
+    for j, Data in enumerate(dataNearestMean_harmfit_on_IF):
+        #print(Data)
+        # plot individual data
+        array = data
+        dist = np.sqrt((array[:,0]-Data[1])**2+(array[:,1]-Data[2])**2)
+        
+        dist_index = np.argmin(dist)
+        nearestArray = np.arange(dist_index-5, dist_index+5)
+        mydata = data[nearestArray][:, 3:8]  # indiv
+
+        Rho = np.array(Data[3:8]) # mean
+        # Replace NaN values with 1000
+        #Rho[np.isnan(Rho)] = 1000  
+
+        Inv_indiv = np.loadtxt(f'{farmName}_InvResultIndividualPoints_{j}th_point.csv' , delimiter=';')
+        #print(Inv_indiv.astype(int).shape)
+
+        #print(Inv_indiv.shape)
+        Inv_mean = np.loadtxt(f'{farmName}_InvResultMeanPoints.csv', delimiter=';')
+        InvMeanResponse = np.loadtxt(f'{farmName}_invMeanResponse_{j}th point.csv', delimiter=';')
+        inv_mean = Inversion(fop=fop) # passing the fwd operator in the inversion
+        
+        fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(15.5, 8), gridspec_kw={'height_ratios': [1, 1]})
+        plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.2, hspace=0.4)
+        ax0 = axes[0, 0]
+        ax1 = axes[0, 1]
+        ax2 = axes[0, 2]
+        ax3 = axes[1, 0]
+        ax4 = axes[1, 1]
+        ax5 = axes[1, 2]
+
+        ax0.bar(range(len(chi2Indiv[j])), chi2Indiv[j], width=0.3, label=f"chi2 for individual data {j}")
+        ax0.axhline(chi2Mean[j], linestyle='--', c='r', label="chi2 for mean data")
+        ax0.grid(True)
+        ax0.set_xlim([0, len(chi2VecIndiv)])
+        ax0.legend(fontsize=8, loc=4)
+        ax0.set_xlabel('individual data')
+        ax0.set_ylabel('$\u03C7^2$')
+        ax0.set_title( f'Chi-Square')
+        
+        ax1.semilogx(Rho, amVec, "+", markersize=9, mew=2, label="Mean Data")
+        ax1.semilogx(InvMeanResponse, amVec, "x", mew=2, markersize=8, label="Mean Response")
+        ax1.invert_yaxis()
+        ax1.set_xlim([5, 3000])
+        ax1.grid(True) 
+        ax1.semilogx(data[nearestArray][0, 3:8], amVec, ".", markersize=2, label="Individual Data")
+        for i in range(1, mydata.shape[0]):
+            ax1.semilogx(mydata[i, :], amVec, ".", markersize=2)
+        ax1.legend(fontsize=8, loc=2)
+        # ax1.set_title(f' Reference Point {Data[0]:.0f} - {farmName}',  loc='center', fontsize= 20)
+        ax1.set_ylabel('spacing')
+        ax1.set_title(f'Rhoa')
+    
+        
+        drawModel1D(ax2, thickness=thk, values=Inv_mean[j], plot='semilogx', color='g', zorder=20, label="mean")
+        ax2.set_xlim([5, 50000])
+        ax2.legend(fontsize=8, loc=2)
+        ax2.set_title('Model')
+        for inv in Inv_indiv: 
+            if isinstance(inv, np.ndarray) and inv.shape[0] > 0:  # Check if inv is a non-empty NumPy array
+                drawModel1D(ax2, thickness=thk, values=inv, plot='semilogx', color='lightgray', linewidth=1)
+        
+        ax3.plot(Eutm[nearestArray], Nutm[nearestArray], "x", markersize=8, mew=2, label='Nearest Points')
+        ax3.plot(all_refpoints['E'].iloc[j], all_refpoints['N'].iloc[j], "o", markersize=8, mew=2, label='Reference Point')
+        ax3.axis("equal")
+        ax3.set_title(f'Reference point {Data[0]:.0f} and its {len(nearestArray)} nearest points')
+        ax3.legend(prop={'size': 8})
+        ax3.set_xlabel('easting')
+        ax3.set_ylabel('northing')
+        ax3.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        ax3.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        ax3.xaxis.set_tick_params(rotation=30)
+        ax3.grid()
+
+        matrixRho = np.vstack((mydata[:,0],mydata[:,1],mydata[:,2],mydata[:,3],mydata[:,4]))
+        norm=colors.LogNorm(vmin=10, vmax=1000)
+        mat=ax4.matshow(matrixRho, cmap='Spectral_r', norm=norm)
+        ax4.axis("equal")
+        ax4.set_title('Rhoa')
+        ax4.set_xlabel(f'nearest data to the reference point {Data[0]:.0f} ')
+        ax4.set_ylabel('spacing')
+        ax4.set_ylim([4,0])
+        ax4.set_ylim( auto=True)
+        fig.colorbar(mat, ax=ax4, orientation='horizontal')
+        
+
+
+        # # Initialize an empty list to store individual models
+        # Inv_indiv_list = []
+        
+        # # Loop through each iteration and create a list of individual models
+        # for j in range(len(Inv_indiv)):
+        #     model = Inv_indiv[j]
+            
+        #     if isinstance(model, np.ndarray) and model.ndim == 1:
+        #         Inv_indiv_list.append(model.astype(int).tolist())
+        #     elif np.isscalar(model):
+        #         Inv_indiv_list.append([int(model)])
+        #     else:
+        #         print(f"Warning: Invalid individual model found for iteration {j}. Ignoring this iteration.")
+        #         Inv_indiv_list.append([])  # Add an empty list for invalid models
+        # #print(len(Inv_indiv_list[0]))
+
+        # # Show the stitched models for one row (when we have just one non-Nan data for inversion)
+        # if len(Inv_indiv_list[0]) == 1:
+        #    # Draw the simple model using ax5.matshow
+        #    matrixModel = np.array([Inv_indiv_list]).T
+        #    norm = colors.LogNorm(vmin=10, vmax=1000)
+        #    mod = ax5.matshow(matrixModel[-1, :, :], cmap='Spectral_r', norm=norm, aspect='auto') 
+        #    ax5.set_title('Individual Model')
+        #    ax5.set_xlabel('spacing')
+        #    ax5.set_ylabel('model index')
+        #    ax5.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        #    ax5.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+        #    fig.colorbar(mod, ax=ax5, orientation='horizontal')
+        # else:
+        #    # Show the stitched models for multiple rows
+        pg.viewer.mpl.showStitchedModels(Inv_indiv, ax=ax5, x=None, cMin=10, cMax=1000, cMap='Spectral_r', thk=thk, logScale=True, title='Model (Ohm.m)', zMin=0, zMax=0, zLog=False)
+                
+        
+        # the main title
+        fig.suptitle(f'{farmName} farm, Reference point {Data[0]:.0f}', fontsize=16)
+        
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+        plt.savefig(pdf, format='pdf')
