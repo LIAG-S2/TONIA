@@ -27,8 +27,8 @@ import seaborn as sns
 # filepath = 'TRB_Wertheim_Geophilus_roh_221125.csv'
 # farmName = 'Trebbin Wertheim'
 
-filepath = 'Aussenschlag_2023_10_11_modified.csv'
-farmName = 'Trebbin Aussenschlag'
+# filepath = 'Aussenschlag_2023_10_11_modified.csv'
+# farmName = 'Trebbin Aussenschlag'
 
 # filepath = 'BFD_Banane_Geophilus_221118_roh.csv'
 # farmName = 'Beerfelde Banane'
@@ -36,10 +36,11 @@ farmName = 'Trebbin Aussenschlag'
 # filepath = 'BFD_Fettke_Geophilus_roh.csv'
 # farmName = 'Beerfelde Fettke'
 
-# filepath_Processed = 'BFD_Fettke_Geophilus_roh.csv'
-# farmName_Processed = 'Beerfelde_Fettke_Processed data'
-# filepath_original = 'Beerfelde 2022_10_21-original.csv'
-# farmName_original = 'Beerfelde_Fettke_Original data'
+filepath_Processed = 'BFD_Fettke_Geophilus_roh.csv'
+farmName_Processed = 'Beerfelde_Fettke_Processed data'
+filepath_original = 'Beerfelde 2022_10_21-original.csv'
+farmName_original = 'Beerfelde_Fettke_Original data'
+
 
 # filepath = 'BDW_Hoben_Geophilus_221020_roh.csv'
 # farmName = 'Brodowin Hoben'
@@ -58,17 +59,18 @@ farmName = 'Trebbin Aussenschlag'
 def read_processed_data(filepath):
     # EdecDeg_P, NdecDeg_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, nan_data, Rho5_P, Gamma_P, BFI, lfd, Datum, Zeit = np.genfromtxt(
     #     filepath, skip_header=1, delimiter=',', unpack=True)
-    EdecDeg_P, NdecDeg_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, nan_data, Rho5_P, Gamma_P, BFI, lfd, Datum, Zeit = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
-    Eutm_P, Nutm_P, zone, letter = utm.from_latlon(NdecDeg_P, EdecDeg_P)
-    farmName_Processed = 'TRB_Wertheim_Geophilus_roh_221125.csv'
-    np.savetxt(f'{farmName_Processed} farm_data.csv', np.column_stack((Eutm_P, Nutm_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, Rho5_P, Gamma_P)), delimiter=';', fmt='%s')
-    data_processed = np.column_stack((Eutm_P, Nutm_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, Rho5_P, Gamma_P))
-    return data_processed
+    # EdecDeg_P, NdecDeg_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, nan_data, Rho5_P, Gamma_P, BFI, lfd, Datum, Zeit = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
+    EdecDeg_P, NdecDeg_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, Rho5_P = np.genfromtxt(filepath, skip_header=0, delimiter='', unpack=True)
+    #Eutm_P, Nutm_P, zone, letter = utm.from_latlon(NdecDeg_P, EdecDeg_P)
+    #farmName_Processed = 'TRB_Wertheim_Geophilus_roh_221125.csv'
+    #np.savetxt(f'{farmName_Processed} farm_data.csv', np.column_stack((Eutm_P, Nutm_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, Rho5_P, Gamma_P)), delimiter=';', fmt='%s')
+    data = np.column_stack((EdecDeg_P, NdecDeg_P, H_P, Rho1_P, Rho2_P, Rho3_P, Rho4_P, Rho5_P ))
+    return data
 
 # Function to read the original data
 def read_original_data(filepath):
-    # EdecDeg_O, NdecDeg_O, H_O, Rho1_O, Rho2_O, Rho3_O, Rho4_O, nan_data, Rho5_O, Gamma_O = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
-    EdecDeg_O, NdecDeg_O, H_O, Rho1_O, Rho2_O, Rho3_O, Rho4_O, nan_data, Rho5_O, Gamma_O, BFI, lfd, Datum, Zeit = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
+    EdecDeg_O, NdecDeg_O, H_O, Rho1_O, Rho2_O, Rho3_O, Rho4_O, nan_data, Rho5_O, Gamma_O = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
+    # EdecDeg_O, NdecDeg_O, H_O, Rho1_O, Rho2_O, Rho3_O, Rho4_O, nan_data, Rho5_O, Gamma_O, BFI, lfd, Datum, Zeit = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
     Eutm_O, Nutm_O, zone, letter = utm.from_latlon(NdecDeg_O, EdecDeg_O)
     farmName_original = 'TRB_Wertheim_Geophilus_roh_221125.csv'
     np.savetxt(f'{farmName_original}.txt', np.column_stack((Eutm_O, Nutm_O, H_O, Rho1_O, Rho2_O, Rho3_O, Rho4_O, Rho5_O, Gamma_O)), delimiter=';', fmt='%s')
@@ -77,11 +79,24 @@ def read_original_data(filepath):
 
     return data_original
 
+# Function to read the data
+def read_data(filepath):
+    EdecDeg, NdecDeg, H, Rho1, Rho2, Rho3, Rho4, Rho5, Gamma = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
+    # EdecDeg, NdecDeg, H, Rho1, Rho2, Rho3, Rho4, nan_data, Rho5, Gamma, BFI, lfd, Datum, Zeit = np.genfromtxt(filepath, skip_header=1, delimiter=',', unpack=True)
+    Eutm, Nutm, zone, letter = utm.from_latlon(NdecDeg, EdecDeg)
+    data_original = np.column_stack((Eutm, Nutm, H, Rho1, Rho2, Rho3, Rho4, Rho5, Gamma))
+
+    return data_original
 
 # Function to plot original data's areal plot
-def plot_data(data_original, spacing_labels, farmName, refPoints, cmap='jet', vmin=10, vmax=1000):
+def plot_data(data_file, spacing_labels, farmName, refPoints, cmap='jet', vmin=10, vmax=1000):
+    # Read original data
+    data = read_data(data_file)
+    print(data.shape)
+    downsampled_data = data[::2]
+    
     # Create a multi-page PDF file to save the plots
-    pdf_filename = f"Original_Data_{farmName}.pdf"
+    pdf_filename = f"Data_{farmName}.pdf"
     pdf_pages = PdfPages(pdf_filename)
 
     for i, spacing in enumerate(spacing_labels):
@@ -89,11 +104,11 @@ def plot_data(data_original, spacing_labels, farmName, refPoints, cmap='jet', vm
         plt.figure(figsize=(8, 6))
         
         # Extract UTM coordinates (Easting and Northing) for the current spacing
-        x_coords = data_original[:, 0]  # UTM Easting
-        y_coords = data_original[:, 1]  # UTM Northing
+        x_coords = downsampled_data[:, 0]  # UTM Easting
+        y_coords = downsampled_data[:, 1]  # UTM Northing
         
         # Draw the areal plot for the original data points
-        sc = plt.scatter(x_coords, y_coords, s=0.7, c=data_original[:, i + 3], cmap='jet', norm=LogNorm(vmin=vmin, vmax=vmax))
+        sc = plt.scatter(x_coords, y_coords, s=0.7, c=downsampled_data[:, i + 3], cmap='jet', norm=LogNorm(vmin=vmin, vmax=vmax))
         
         # Plot the reference points on the subplot
         plt.scatter(refPoints['E'], refPoints['N'], c='red', marker='x', s=40, label='Reference Points')
@@ -101,8 +116,6 @@ def plot_data(data_original, spacing_labels, farmName, refPoints, cmap='jet', vm
         # Annotate each reference point with its corresponding index (number)
         for j, txt in enumerate(refPoints['Name']):
             plt.annotate(txt, (refPoints['E'][j], refPoints['N'][j]), fontsize=10, color='black')
-        # Equalize the x and y axes
-        plt.axis('equal')
         
         # colorbar
         plt.colorbar(sc)
@@ -111,7 +124,8 @@ def plot_data(data_original, spacing_labels, farmName, refPoints, cmap='jet', vm
         plt.xlabel('Easting (UTM)')
         plt.ylabel('Northing (UTM)')
         plt.title(f'Data - {spacing} - {farmName}', y=1.03)
-
+        # Equalize the x and y axes
+        plt.axis('equal')
         # Save the current plot to the PDF file
         pdf_pages.savefig()
         plt.show()
@@ -121,7 +135,7 @@ def plot_data(data_original, spacing_labels, farmName, refPoints, cmap='jet', vm
 
     # Close the PDF file
     pdf_pages.close()
-
+    return downsampled_data
 
 
 class LineDetector:
@@ -174,15 +188,24 @@ class LineDetector:
 
 
 
+def plot_detected_lines(data_file, farmName, refPoints_df, maxAngleDeviation, minPoints):
+    
+    # Read data
+    data = read_data(data_file)
+    # Eutm_O, Nutm_O = data_original[:, 0], data_original[:, 1]
+    downsampled_data = data[::2]
+    Eutm_O, Nutm_O = downsampled_data[:, 0], downsampled_data[:, 1]
 
+    # Calculate the differences between adjacent points
+    dx = np.diff(Eutm_O)
+    dy = np.diff(Nutm_O)
+    
+    # Calculate the distances between adjacent points
+    distances = np.sqrt(dx**2 + dy**2)
 
-def plot_detected_lines(data_file, farmName, refPoints_df, maxDeviation, minPoints):
-    # Read original data
-    data_original = read_original_data(data_file)
-    Eutm_O, Nutm_O = data_original[:, 0], data_original[:, 1]
 
     # Create LineDetector instance with desired parameters
-    line_detector = LineDetector(minPoints, maxDeviation)
+    line_detector = LineDetector(minPoints, maxAngleDeviation)
 
     # Detect lines
     line_indices = line_detector.detect_lines(Eutm_O, Nutm_O)
@@ -190,13 +213,19 @@ def plot_detected_lines(data_file, farmName, refPoints_df, maxDeviation, minPoin
     # Get unique line indices and their counts
     unique_lines, counts = np.unique(line_indices, return_counts=True)
 
-    # Filter lines with more than minPoints
-    valid_lines = unique_lines[counts >= minPoints]
+    # Filter lines with more than 10 points
+    selected_lines = unique_lines[counts >= 10]
     
+   
+    # Print detected lines with more than 10 points
+    num_lines = len(selected_lines)
+    num_unvalid_lines = len(unique_lines) - num_lines
+    print("Number of valid lines detected: ", num_lines)
+    print("Number of invalid lines (containing less than 10 points): ", num_unvalid_lines)
     # Store line numbers
-    line_numbers = [i + 1 for i in range(len(valid_lines))]
+    line_numbers = [i + 1 for i in range(len(unique_lines))]
     # Create a dictionary to map line indices to line_numbers
-    line_number_mapping = dict(zip(valid_lines, line_numbers))
+    line_number_mapping = dict(zip(selected_lines, unique_lines))
 
     # Find the maximum x and y coordinates among detected lines and reference points
     max_x = np.max(Eutm_O)
@@ -213,21 +242,19 @@ def plot_detected_lines(data_file, farmName, refPoints_df, maxDeviation, minPoin
 
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
-    for i, line_num in enumerate(valid_lines):
-        # Filter out lines with only 5 points
-        if len(line_indices[line_indices == line_num]) > 5:
-            # Plot lines for the valid_lines
-            line_x = Eutm_O[line_indices == line_num]
-            line_y = Nutm_O[line_indices == line_num]
-            plt.plot(line_x, line_y, color=colors[i % len(colors)], label=f'Line {line_number_mapping[line_num]}')
-            # Add line number annotation next to the line start
-            plt.annotate(f' {line_number_mapping[line_num]}', (line_x[0], line_y[0]), textcoords="offset points", xytext=(10, 10),
-                          ha='center', fontsize=10, color=colors[i % len(colors)])
+    for i, line_num in enumerate(selected_lines):
+        # Plot lines for all detected lines
+        line_x = Eutm_O[line_indices == line_num]
+        line_y = Nutm_O[line_indices == line_num]
+        plt.plot(line_x, line_y, color=colors[i % len(colors)], label=f'Line {line_number_mapping[line_num]}')
+        # Add line number annotation next to the line start
+        plt.annotate(f' {line_number_mapping[line_num]}', (line_x[0], line_y[0]), textcoords="offset points", xytext=(10, 10),
+                      ha='center', fontsize=10, color=colors[i % len(colors)])
 
-    # Plot reference point locations
-    plt.scatter(refPoints_df['E'], refPoints_df['N'], c='black', marker='x', s=40, label='Reference Points')
-    for j, txt in enumerate(refPoints_df['Name']):
-        plt.annotate(txt, (refPoints_df['E'][j], refPoints_df['N'][j]), fontsize=9, color='black', ha='right', va='bottom')
+    # # Plot reference point locations
+    # plt.scatter(refPoints_df['E'], refPoints_df['N'], c='black', marker='x', s=40, label='Reference Points')
+    # for j, txt in enumerate(refPoints_df['Name']):
+    #     plt.annotate(txt, (refPoints_df['E'][j], refPoints_df['N'][j]), fontsize=9, color='black', ha='right', va='bottom')
 
     # Set x and y axes with consistent maximum values
     plt.xlim(min_x, max_x)
@@ -247,7 +274,7 @@ def plot_detected_lines(data_file, farmName, refPoints_df, maxDeviation, minPoin
         ref_x, ref_y = refPoint['E'], refPoint['N']
         closest_line = None
         min_distance = np.inf
-        for line_num in valid_lines:
+        for line_num in unique_lines:
             line_x = Eutm_O[line_indices == line_num]
             line_y = Nutm_O[line_indices == line_num]
             distances = np.sqrt((line_x - ref_x) ** 2 + (line_y - ref_y) ** 2)
@@ -260,8 +287,11 @@ def plot_detected_lines(data_file, farmName, refPoints_df, maxDeviation, minPoin
 
     # Join the closest line information and place it at the bottom left
     closest_line_info = '\n'.join(bottom_text)
-    plt.annotate(closest_line_info, xy=(0.02, 0.02), xycoords='axes fraction', fontsize=10, color='blue',
-                 ha='left', va='bottom')
+    # plt.annotate(closest_line_info, xy=(0.02, 0.02), xycoords='axes fraction', fontsize=10, color='blue',
+    #              ha='left', va='bottom')
+    plt.annotate(closest_line_info, xy=(0.98, 0.02), xycoords='axes fraction', fontsize=8, color='blue',
+                 ha='right', va='bottom')
+
     
     # Save the plot as a JPEG image with the same name as the PDF
     jpeg_filename = f"detected_lines_{farmName}.jpeg"
@@ -270,7 +300,6 @@ def plot_detected_lines(data_file, farmName, refPoints_df, maxDeviation, minPoin
     # Save the current plot to the PDF file
     pdf_pages.savefig()
 
-
     # Close the PDF file
     pdf_pages.close()
 
@@ -278,22 +307,106 @@ def plot_detected_lines(data_file, farmName, refPoints_df, maxDeviation, minPoin
 
 
 
+def plot_lines_separately(data_file, farmName, refPoints, maxAngleDeviation, minPoints):
+    # Read original data
+    data_original = read_original_data(data_file)
+    # Eutm_O, Nutm_O = data_original[:, 0], data_original[:, 1]
+    downsampled_data = data_original[::2]
+    Eutm_O, Nutm_O = downsampled_data[:, 0], downsampled_data[:, 1]
+       
+    # Create LineDetector instance with desired parameters
+    line_detector = LineDetector(minPoints, maxAngleDeviation)
+       
+    # Detect lines
+    line_indices = line_detector.detect_lines(Eutm_O, Nutm_O)
+       
+    # Get unique line indices and their counts
+    unique_lines, counts = np.unique(line_indices, return_counts=True)
+       
+    # Filter lines with more than 10 points
+    selected_lines = unique_lines[counts >= 10]    
+   
+    # Store line numbers
+    line_numbers = [i + 1 for i in range(len(unique_lines))]
+    # Create a dictionary to map line indices to line_numbers
+    line_number_mapping = dict(zip(selected_lines, unique_lines))
+
+    # Find the maximum x and y coordinates among detected lines and reference points
+    max_x = np.max(Eutm_O)
+    max_y = np.max(Nutm_O)
+    min_x = np.min(Eutm_O)
+    min_y = np.min(Nutm_O)
+
+
+    # Create a PDF file to save the plot
+    pdf_filename = f"detected_lines_separate_{farmName}.pdf"
+    pdf_pages = PdfPages(pdf_filename)
+
+    colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+
+    
+    for i, line_num in enumerate(selected_lines):
+        fig, ax = plt.subplots(figsize=(10, 8))  # Create a figure and axis
+        # Plot the line
+        line_x = Eutm_O[line_indices == line_num]
+        line_y = Nutm_O[line_indices == line_num]
+        ax.plot(line_x, line_y, color=colors[i % len(colors)], label=f'Line {line_num}')
+        # Add line number annotation next to the line start
+        plt.annotate(f' {line_number_mapping[line_num]}', (line_x[0], line_y[0]), textcoords="offset points", xytext=(10, 10),
+                      ha='center', fontsize=10, color=colors[i % len(colors)])
+
+        # Plot reference point locations
+        ax.scatter(refPoints['E'], refPoints['N'], c='black', marker='x', s=40, label='Reference Points')
+        for j, txt in enumerate(refPoints['Name']):
+            ax.annotate(txt, (refPoints['E'][j], refPoints['N'][j]), fontsize=9, color='black', ha='right', va='bottom')
+    
+        # Set x and y axes with consistent maximum values
+        ax.set_xlim(min_x, max_x)
+        ax.set_ylim(min_y, max_y)
+    
+        # Set plot labels and title
+        ax.set_xlabel('Easting (UTM)')
+        ax.set_ylabel('Northing (UTM)')
+        ax.set_title(f'Line {line_number_mapping[line_num]} - {farmName}', y=1.03)
+    
+        # Equalize the x and y axes
+        ax.axis('equal')
+    
+        # Display the plot interactively
+        plt.show()
+    
+        # Save the plot to the PDF file
+        pdf_pages.savefig(fig)
+    
+        # Close the figure to avoid the 'No figure None' error
+        plt.close(fig)
+    
+    # Close the PDF file
+    pdf_pages.close()
+
+
+
 # Function to perform Isolation Forest on original data
-def isolation_forest_outlier_detection(data_original, num_spacing, refPoints_df):
+def isolation_forest_outlier_detection(data_file, num_spacing, refPoints_df, farmName):
     # Set a fixed random seed
     np.random.seed(42)
+    
+    data_original = read_original_data(data_file)
+    
+    downsampled_data = data_original[::2]
+    
     # Create an array to store the Isolation Forest results
-    resistivity_data = data_original[:,3:8]
+    resistivity_data = downsampled_data[:,3:8]
     num_spacing = resistivity_data.shape[1]  # 5 spacing in Geophilus system# should be outside of the function
 
     Isolation_Forest = np.empty((len(resistivity_data), num_spacing + 4))
     Isolation_Forest[:] = np.nan
 
     # Store the (X,Y) UTM coordinates, H_original, and Gamma_original
-    Isolation_Forest[:, 0] = data_original[:,0]
-    Isolation_Forest[:, 1] = data_original[:,1]
-    Isolation_Forest[:, 2] = data_original[:,2]
-    Isolation_Forest[:, -1] = data_original[:,8]
+    Isolation_Forest[:, 0] = downsampled_data[:,0]
+    Isolation_Forest[:, 1] = downsampled_data[:,1]
+    Isolation_Forest[:, 2] = downsampled_data[:,2]
+    Isolation_Forest[:, -1] = downsampled_data[:,8]
 
     num_outliers = np.zeros(num_spacing)  # Array to store the number of outliers per spacing
 
@@ -317,7 +430,7 @@ def isolation_forest_outlier_detection(data_original, num_spacing, refPoints_df)
         selected_values = np.exp(resistivity_values_original[outliers_iforest == 1])
         Isolation_Forest[outliers_iforest == 1, spacing + 3] = selected_values
         
-            # Draw the areal plot for the Isolation Forest data points
+        # Draw the areal plot for the Isolation Forest data points
         plt.figure(figsize=(8, 6))
         sc = plt.scatter(Isolation_Forest[:, 0], Isolation_Forest[:, 1],
                          s=0.7, c=Isolation_Forest[:, spacing + 3], cmap='jet', norm=LogNorm(vmin=10, vmax=1000))
@@ -387,11 +500,7 @@ def harmfit_without_nan(data, nc=30, error=0.01):
 
 
 def harmfit_on_IF(Isolation_Forest, spacing_labels, selected_lines, line_indices, farmName, refPoints_df, cmap='jet', vmin=10, vmax=1000):
-    from matplotlib.backends.backend_pdf import PdfPages
-    from matplotlib.colors import LogNorm
-    import matplotlib.pyplot as plt
-
-    pdf_filename = f"Harmfit_Isolation_forest_{farmName}.pdf"
+    pdf_filename = f"Harmfit_on_IF_{farmName}.pdf"
     pdf_pages = PdfPages(pdf_filename)
     nc = 30
 
@@ -485,12 +594,14 @@ def harmfit_on_IF(Isolation_Forest, spacing_labels, selected_lines, line_indices
 
 
 
-def harmfit_on_org(original_data, spacing_labels, selected_lines, line_indices, farmName, refPoints_df, cmap='jet', vmin=10, vmax=1000):
-
-    pdf_filename = f"Harmfit_original_{farmName}.pdf"
+def harmfit_on_org_ok(data_file, spacing_labels, selected_lines, line_indices, farmName, refPoints_df, cmap='jet', vmin=10, vmax=1000):
+    pdf_filename = f"Harmfit_on_Original_{farmName}.pdf"
     pdf_pages = PdfPages(pdf_filename)
     nc = 30
-
+    
+    data = read_data(data_file)     
+    downsampled_data = data[::2]
+    
     all_harmfitted_data = []  # List to store harmfitted data for all spacings
 
     # Iterate over each spacing
@@ -504,11 +615,11 @@ def harmfit_on_org(original_data, spacing_labels, selected_lines, line_indices, 
             point_indices_of_interest = np.where(line_indices == line_num)[0]
             point_indices_of_interest = point_indices_of_interest.astype(int)
 
-            x_coords = original_data[point_indices_of_interest, 0]
-            y_coords = original_data[point_indices_of_interest, 1]
-            h = original_data[point_indices_of_interest, 2]
+            x_coords = downsampled_data[point_indices_of_interest, 0]
+            y_coords = downsampled_data[point_indices_of_interest, 1]
+            h = downsampled_data[point_indices_of_interest, 2]
 
-            resistivity_spacing_line = original_data[point_indices_of_interest, i + 3]
+            resistivity_spacing_line = downsampled_data[point_indices_of_interest, i + 3]
 
             x_harmfitted, y_harmfitted, harmfitted_org_data = harmfit_without_nan(
                 np.column_stack((x_coords, y_coords, resistivity_spacing_line)),
@@ -561,35 +672,133 @@ def harmfit_on_org(original_data, spacing_labels, selected_lines, line_indices, 
 
 
 
-
+def harmfit_on_org(data_file, spacing_labels, selected_lines, line_indices, farmName_Original, refPoints_df, cmap='jet', vmin=10, vmax=1000):
+    pdf_filename = f"Harmfit_on_Original_{farmName_Original}.pdf"
+    pdf_pages = PdfPages(pdf_filename)
+    nc = 30
     
+    data = read_data(data_file)     
+    downsampled_data = data[::2]
+    
+    all_harmfitted_data = []  # List to store harmfitted data for all spacings
+    H_values_all = []  # List to store H values
+    Gamma_values_all = []  # List to store Gamma values
+
+    # Iterate over each spacing
+    for i, spacing in enumerate(spacing_labels):
+        x_all = []
+        y_all = []
+        h_all = []
+        harmfitted_spacing_data_list_spacing = []  # List to store harmfitted data for the current spacing
+
+        # Iterate over each selected line
+        for line_num in selected_lines:
+            point_indices_of_interest = np.where(line_indices == line_num)[0]
+            point_indices_of_interest = point_indices_of_interest.astype(int)
+
+            x_coords = downsampled_data[point_indices_of_interest, 0]
+            y_coords = downsampled_data[point_indices_of_interest, 1]
+            H_values = downsampled_data[point_indices_of_interest, 2]
+
+            # Initialize arrays for H and Gamma
+            Gamma_values = downsampled_data[point_indices_of_interest, 8]  # Replace with your actual Gamma values
+
+            resistivity_spacing_line = downsampled_data[point_indices_of_interest, i + 3]
+
+            x_harmfitted, y_harmfitted, harmfitted_org_data = harmfit_without_nan(
+                np.column_stack((x_coords, y_coords, resistivity_spacing_line)),
+                nc=nc,
+                error=0.01)
+
+            x_all.extend(x_harmfitted)
+            y_all.extend(y_harmfitted)
+
+
+            harmfitted_spacing_data_list_spacing.extend(harmfitted_org_data)
+            # Create arrays for H and Gamma
+            H_values_all.extend(H_values)
+            Gamma_values_all.extend(Gamma_values)
+
+        # Append harmfitted data for the current spacing
+        all_harmfitted_data.append(harmfitted_spacing_data_list_spacing)
+
+        # Draw the areal plot for all lines together for the current spacing
+        plt.figure(figsize=(8, 6))
+        sc = plt.scatter(x_all, y_all, s=0.7, c=harmfitted_spacing_data_list_spacing, cmap='jet', norm=LogNorm(vmin=10, vmax=1000))
+
+        # Plot the reference points on the subplot
+        plt.scatter(refPoints_df['E'], refPoints_df['N'], c='red', marker='x', s=30, label='Reference Points')
+
+        # Annotate each reference point with its corresponding index (number)
+        for j, txt in enumerate(refPoints_df['Name']):
+            plt.annotate(txt, (refPoints_df['E'][j], refPoints_df['N'][j]), fontsize=9, color='black')
+
+        # colorbar
+        plt.colorbar(sc)
+
+        # Set plot labels and title
+        plt.xlabel('Easting (UTM)')
+        plt.ylabel('Northing (UTM)')
+        plt.title(f'Harmfit on original - {spacing} - {farmName_Original}', y=1.03)
+        plt.axis('equal')
+
+        # Save the current plot to the PDF file
+        pdf_pages.savefig()
+        plt.show()
+
+        plt.close()
+
+    # Close the PDF file
+    pdf_pages.close()
+    #Eutm, Nutm, zone, letter = utm.from_latlon(NdecDeg, EdecDeg)
+
+    latitude, longitude = utm.to_latlon(np.asarray(x_all,), np.asarray(y_all), 33, 'T')
+
+    # Add H and Gamma to the final data
+    #data_to_save = np.column_stack((x_all, y_all, H_values_all[:len(y_all)], Gamma_values_all[:len(y_all)]) + tuple(all_harmfitted_data))
+    data_to_save = np.column_stack((longitude,latitude, H_values_all[:len(y_all)], np.asarray(all_harmfitted_data[:len(y_all)]).T, Gamma_values_all[:len(y_all)]))
+
+
+    # Save the final data with H and Gamma
+    harmfitted_data_file = f"harmfit_on_original_{farmName_Original}.txt"
+    np.savetxt(harmfitted_data_file, data_to_save, delimiter=',')
+
+    return data_to_save
+
+
 
 # Main function
 def main():
-    # data_file = "Beerfelde 2022_10_21-original.csv"
-    # farmName = 'Beerfelde Fettke'
+    filepath_Original = "Beerfelde 2022_10_21-original.csv" # Origial data
+    farmName_Original = 'Beerfelde Fettke_Original'
+    filepath_Processed = 'BFD_Fettke_Geophilus_roh_Processed.csv'
+    farmName_Processed = 'Beerfelde Fettke_Processed'
+
     
     # data_file = 'TRB_Wertheim_Geophilus_roh_221125.csv'
     # farmName = 'Trebbin Wertheim'
-    data_file = 'Aussenschlag_2023_10_11_modified.csv'
-    farmName = 'Trebbin Aussenschlag'
+    # data_file = 'Aussenschlag_2023_10_11_modified.csv'
+    # farmName = 'Trebbin Aussenschlag'
     
     spacing_labels = ['Spacing 1', 'Spacing 2', 'Spacing 3', 'Spacing 4', 'Spacing 5']
 
     # Read original data
-    data_original = read_original_data(data_file)
+    data_original = read_data(filepath_Original)
+    downsampled_data = data_original[::2]
+    downsampled_data_fileName = f'{filepath_Original}_downsampled.csv'
+    np.savetxt(downsampled_data_fileName, downsampled_data, delimiter=';')
     
-    # Read processed data
-    processed_data = read_processed_data(data_file)
-    minPoints = 10.
-    minDist = 10.
-    maxAngleDeviation=10.
-    # Create LineDetector instance with desired parameters
-    #line_detector = LineDetector(minPoints, maxDeviation=22.)  # Adjust maxDeviation as needed
-    line_detector = LineDetector(minPoints=5, maxAngleDeviation=20)
+    num_spacing = data_original[:,3:8].shape[1]  # 5 spacing in Geophilus system
 
+
+
+    minPoints = 100.
+    maxAngleDeviation=25.
+
+    # Create LineDetector instance with desired parameters
+    line_detector = LineDetector(minPoints, maxAngleDeviation)
     # Detect lines
-    line_indices = line_detector.detect_lines(data_original[:, 0], processed_data[:, 1])
+    line_indices = line_detector.detect_lines(downsampled_data[:, 0], downsampled_data[:, 1])
     
     # Get unique line indices and their counts
     unique_lines, counts = np.unique(line_indices, return_counts=True)
@@ -606,38 +815,89 @@ def main():
     
     # Import reference points from KML file
     # kmlFile = 'TRB_Wertheim_Referenzpunkte_gemessen_2022-12-01.kml'
-    kmlFile = 'TRB_Außenschlag_Referenzpunkte_gemessen_2023-03-20.kml'
+    # kmlFile = 'TRB_Außenschlag_Referenzpunkte_gemessen_2023-03-20.kml'
+    kmlFile = 'BFD_Fettke_Referenzpunkte_gemessen.kml'
     fiona.drvsupport.supported_drivers['KML'] = 'rw'
     gdf = gpd.read_file(kmlFile)
     refLat = np.array(gdf['geometry'].y)
     refLon = np.array(gdf['geometry'].x)
     refEutm, refNutm, refzone, refletter = utm.from_latlon(refLat, refLon)
     refName = np.array(gdf['Name'])
-    refPoints = np.column_stack([refName, refEutm, refNutm])
+    ref_Points = np.column_stack([refName, refEutm, refNutm])
     header = ['Name', 'E', 'N']
-    refPointsTable = np.vstack((header, refPoints))
-    np.savetxt(f'{farmName}_farm_reference_Points.csv', refPointsTable, delimiter=';', fmt='%s')
-    refPoints = pd.DataFrame(refPoints, columns=['Name', 'E', 'N'])
+    refPointsTable = np.vstack((header, ref_Points))
+    np.savetxt(f'{filepath_Original}_farm_reference_Points.csv', refPointsTable, delimiter=';', fmt='%s')
+    refPoints = pd.DataFrame(ref_Points, columns=['Name', 'E', 'N'])
 
+    
     # Call the plot_detected_lines function
-    #plot_detected_lines(data_file, farmName, refPoints, maxDeviation, minPoints)
-    plot_detected_lines(data_file, farmName, refPoints, maxAngleDeviation, minPoints)
+    #plot_detected_lines(filepath_Original, farmName_Original, refPoints, maxAngleDeviation, minPoints)
     
     # Call the function to generate the separate PDF with detected lines
-    # plot_lines_separately(data_file, farmName, maxAngleDeviation, refPoints, minPoints)
+    #plot_lines_separately(filepath_Original, farmName_Original, refPoints, maxAngleDeviation, minPoints)
     
     # Plot original data's areal plot
-    # plot_data(processed_data, spacing_labels, farmName, refPoints)
+    #data_org = plot_data(filepath_Original, spacing_labels, farmName_Original, refPoints)
+    
+    # Plot processed data's areal plot
+    #data_proc = plot_data(filepath_Processed, spacing_labels, farmName_Processed, refPoints)
     
     # Perform Isolation Forest
-    # num_spacing = len(spacing_labels)
-    # Isolation_Forest = isolation_forest_outlier_detection(data_original, num_spacing, refPoints)
+    #num_spacing = len(spacing_labels)
+    #Isolation_Forest = isolation_forest_outlier_detection(filepath_Original, num_spacing, refPoints, farmName_Original)
     
     # Perform harmfit on IF result and draw areal plots
-    # harmfit_on_IF(Isolation_Forest, spacing_labels, selected_lines, line_indices, farmName, refPoints)
+   # harmfit_onIF = harmfit_on_IF(Isolation_Forest, spacing_labels, selected_lines, line_indices, farmName_Original, refPoints)
     
     # Perform harmfit on ORIGINAL DATA result and draw areal plots
-    # harmfit_on_org(data_original, spacing_labels, selected_lines, line_indices, farmName, refPoints)
+    harmfit_onOrg = harmfit_on_org(filepath_Original, spacing_labels, selected_lines, line_indices, farmName_Original, refPoints)
+    
 if __name__ == "__main__":
     main()
+
+# %% extract refrence points from KML files
+import fiona
+import geopandas as gpd
+import numpy as np
+import utm
+
+def reference_points_from_kml(kml_file, farmName_Original):
+    # Import KML of reference points
+    fiona.drvsupport.supported_drivers['KML'] = 'rw'
+    gdf = gpd.read_file(kml_file)  # GeoDataFrame object (ref names & geometry, in decimal degree)
+
+    # Extract latitude and longitude coordinates
+    ref_lat = np.array(gdf['geometry'].y)
+    ref_lon = np.array(gdf['geometry'].x)
+
+    # Convert latitude and longitude to UTM
+    ref_eutm, ref_nutm, ref_zone, ref_letter = utm.from_latlon(ref_lat, ref_lon)
+
+    # Extract reference point names
+    ref_name = np.array(gdf['Name'])
+
+    # Create a table with columns: 'Name', 'E', 'N'
+    ref_points = np.column_stack([ref_name, ref_eutm, ref_nutm])
+
+    # Define the header
+    header = ['Name', 'E', 'N']
+
+    # Stack the header on top of the reference points
+    ref_points_table = np.vstack((header, ref_points))
+
+    # Save the reference points to a CSV file
+    csv_filename = f'{farmName_Original} farm_reference_Points.csv'
+    np.savetxt(csv_filename, ref_points_table, delimiter=';', fmt='%s')
+    print(f'Reference points saved to {csv_filename}')
+
+# call it:
+# kml_file = "TRB_Wertheim_Referenzpunkte_gemessen_2022-12-01.kml"
+# farm_name = 'Trebbin_Wertheim'
+# filepath = 'Aussenschlag_2023_10_11_modified.csv'
+filepath = 'BFD_Fettke_Referenzpunkte_gemessen.kml'
+farmName_Original = 'Beerfelde Fettke_Original'
+
+# farm_name = 'Trebbin Aussenschlag'
+kml_file = 'BFD_Fettke_Referenzpunkte_gemessen.kml'
+reference_points_from_kml(kml_file, farmName_Original)
 
