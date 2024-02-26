@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="86">
+	<name>LPP_1211_Referenzpunkte_gemessen_2023-03-20.kmz</name>
+	<Style id="0">
+		<IconStyle id="1">
+			<scale>0.503937</scale>
+			<heading>0</heading>
+			<Icon id="2">
+				<href>icon.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle id="3">
+			<color>ff36b6e5</color>
+		</LineStyle>
+	</Style>
+	<Folder id="4">
+		<name>LPP_1211_Referenzpunkte_gemessen_2023-03-20</name>
+		<Style id="0">
+			<IconStyle id="1">
+				<color>ffffffff</color>
+				<colorMode>normal</colorMode>
+				<scale>0.503937</scale>
+				<heading>0</heading>
+				<Icon id="2">
+					<href>icon.png</href>
+				</Icon>
+			</IconStyle>
+			<LineStyle id="3">
+				<color>ff36b6e5</color>
+				<colorMode>normal</colorMode>
+			</LineStyle>
+		</Style>
+		<Placemark id="6">
+			<name>112</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>112</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801689.63271</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>463085.08304</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>101.59718</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>112</value>
+				</Data>
+			</ExtendedData>
+			<Point id="5">
+				<coordinates>14.45786478025291,52.36424042407772,101.5971830101202</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="14">
+			<name>113</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>113</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801853.33665</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>463090.18646</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>102.73354</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>113</value>
+				</Data>
+			</ExtendedData>
+			<Point id="13">
+				<coordinates>14.45792171321383,52.36571246573243,102.7335370741651</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="22">
+			<name>116</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>116</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801870.54678</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>462802.02888</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>105.95097</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>116</value>
+				</Data>
+			</ExtendedData>
+			<Point id="21">
+				<coordinates>14.45368796830624,52.36584769879459,105.95097471457</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="30">
+			<name>117</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>117</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801768.98136</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>462804.87669</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>109.6964</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>117</value>
+				</Data>
+			</ExtendedData>
+			<Point id="29">
+				<coordinates>14.4537410529387,52.36493482007175,109.6964048263377</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="38">
+			<name>118</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>118</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801688.07935</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>462755.25745</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>106.81315</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>118</value>
+				</Data>
+			</ExtendedData>
+			<Point id="37">
+				<coordinates>14.45302134792018,52.36420414154285,106.8131482854414</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="46">
+			<name>1110</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>1110</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801564.33686</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>462679.72145</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>100.68875</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>1110</value>
+				</Data>
+			</ExtendedData>
+			<Point id="45">
+				<coordinates>14.45192584246864,52.36308655875433,100.6887470565775</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="54">
+			<name>115</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>115</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801676.66597</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>462913.86512</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>103.40228</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>115</value>
+				</Data>
+			</ExtendedData>
+			<Point id="53">
+				<coordinates>14.45535181757926,52.36411229239155,103.4022779007627</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="62">
+			<name>114</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>114</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801736.40018</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>462945.93072</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>105.64921</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>114</value>
+				</Data>
+			</ExtendedData>
+			<Point id="61">
+				<coordinates>14.4558161128549,52.36465147176299,105.6492106405146</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="70">
+			<name>111</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>111</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801691.47667</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>463347.04054</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>92.42912</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>111</value>
+				</Data>
+			</ExtendedData>
+			<Point id="69">
+				<coordinates>14.46171152117463,52.36427458543906,92.42912192282333</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="78">
+			<name>119</name>
+			<description><![CDATA[<table>
+<tr style="background-color:#DDDDFF"><td>Name</td><td>$[Name]</td></tr>
+<tr><td>Northing</td><td>$[Northing]</td></tr>
+<tr style="background-color:#DDDDFF"><td>Easting</td><td>$[Easting]</td></tr>
+<tr><td>Elevation</td><td>$[Elevation]</td></tr>
+<tr style="background-color:#DDDDFF"><td>PointID</td><td>$[PointID]</td></tr>
+</table>]]></description>
+			<styleUrl>#0</styleUrl>
+			<ExtendedData>
+				<Data name="Name">
+					<displayName>Name</displayName>
+					<value>119</value>
+				</Data>
+				<Data name="Northing">
+					<displayName>Northing</displayName>
+					<value>5801601.91899</value>
+				</Data>
+				<Data name="Easting">
+					<displayName>Easting</displayName>
+					<value>462762.29651</value>
+				</Data>
+				<Data name="Elevation">
+					<displayName>Elevation</displayName>
+					<value>104.37747</value>
+				</Data>
+				<Data name="PointID">
+					<displayName>PointID</displayName>
+					<value>119</value>
+				</Data>
+			</ExtendedData>
+			<Point id="77">
+				<coordinates>14.45313428283205,52.36343003905327,104.377465980621</coordinates>
+			</Point>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

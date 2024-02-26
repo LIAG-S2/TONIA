@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+<name>34201</name>
+<Style id="controlPoint">
+<IconStyle>
+<scale>0.5</scale>
+<Icon>
+<href>http://maps.google.com/mapfiles/kml/pal4/icon49.png</href>
+</Icon>
+</IconStyle>
+<LabelStyle><color>ff0000ff</color>
+<colorMode>normal</colorMode>
+<scale>0.6</scale>
+</LabelStyle>
+<BalloonStyle>
+<text><![CDATA[
+Point: <b><font color="#ff0000">$[name]</font></b>
+<br/>
+Code: $[description]
+]]></text>
+</BalloonStyle>
+</Style>
+<Style id="standardPoint">
+<IconStyle>
+<scale>0.5</scale>
+<Icon>
+<href>http://maps.google.com/mapfiles/kml/pal4/icon57.png</href>
+</Icon>
+</IconStyle>
+<LabelStyle><color>ff0000ff</color>
+<colorMode>normal</colorMode>
+<scale>0.6</scale>
+</LabelStyle>
+<BalloonStyle>
+<text><![CDATA[
+Point: <b><font color="#ff0000">$[name]</font></b>
+<br/>
+Code: $[description]
+]]></text>
+</BalloonStyle>
+</Style>
+<Placemark>
+<name>221</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431515.682mE</dd><dd>5863555.797mN</dd><dd>56.548mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.981457730218,52.917293346297,94.086632680148</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>222</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431569.717mE</dd><dd>5863513.797mN</dd><dd>57.803mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.982270080715,52.916922733343,95.341506935656</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>225</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431536.041mE</dd><dd>5863382.621mN</dd><dd>58.965mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.981796980141,52.915739410823,96.506859079003</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>224</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431503.106mE</dd><dd>5863354.901mN</dd><dd>58.678mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.981313107215,52.915486065,96.221538336016</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>223</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431464.011mE</dd><dd>5863436.193mN</dd><dd>54.825mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.980714631214,52.916211739895,92.368001719937</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>226</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431693.150mE</dd><dd>5863186.390mN</dd><dd>55.591mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.984174396083,52.913995653496,93.132229397073</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>227</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431856.268mE</dd><dd>5863013.437mN</dd><dd>50.531mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.986636080475,52.912461839778,88.07067666389</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>228</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431953.881mE</dd><dd>5863209.824mN</dd><dd>57.372mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.988046287556,52.914239372449,94.904835594818</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>229</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431876.846mE</dd><dd>5863197.462mN</dd><dd>58.774mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.986903443138,52.914118495245,96.309795003384</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name>2210</name>
+<description><![CDATA[<font color="#0000ff"></font><font color="#000000"><dl><dt>Grid:</dt><dd>431837.794mE</dd><dd>5863583.565mN</dd><dd>48.117mEl</dd></dl></font>]]></description>
+<styleUrl>#standardPoint</styleUrl>
+<Point>
+<coordinates>13.986241739652,52.917583894095,85.646489099599</coordinates>
+</Point>
+</Placemark>
+</Document>
+</kml>
+
