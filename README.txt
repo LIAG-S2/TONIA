@@ -1,49 +1,63 @@
-TONIA, sub-area differentiated-optimized nutrient management in arable farming
+# TONIA: Sub-Area Differentiated-Optimized Nutrient Management in Arable Farming
 
-The aim of this joint project is not only to optimize nutrient management on arable land, but also for environmental reasons. Since soil is laterally variable and has different specifications, the entire farm areas are measured with a geoelectric measuring system called Geophilus Electricus. The responsibility of LIAG is to evaluate the geoelectric data in this project. The conductivity maps are then converted into 3D soil texture maps with the help of reference points' measurements.
+## Project Overview
 
-Project description
-Farms are not uniform in soil composition and moisture. Consequently, plants in a large area do not receive ideal fertilization. With a few amount of nutrients, plants will not achieve the possible yield on one hand. On the other hand, too many fertilizers contaminate the environment. The goal is a precise calculation of the demand for sub-surface areas. The TONIA project partners are developing soil sensors and 3D soil texture maps that explore the soil down to a depth of 150 cm, especially with regard to soil moisture. Combined with yield modelling, nutrient target value maps and maps of the usable field capacity are created with a resolution of 10x10m, on which the amount of fertilizer is converted according to sub-surface areas. Instead of distributing the total amount of nutrients evenly over the field, in future they will be applied as needed.
+**TONIA** aims to optimize nutrient management in arable farming to achieve environmental benefits and improve crop yields. Traditional farming methods often apply nutrients uniformly across fields, which can result in suboptimal fertilization and environmental contamination. To address this, the TONIA project uses geoelectric measurements to create detailed 3D soil texture maps, helping to tailor nutrient application to specific soil conditions.
 
-Responsibility of LIAG
-The Geophilus Electricus measuring device (Lück & Rühlmann, 2013) measures continuously with five different penetration depths, by increasing the distances between the electrodes. The sensitivity distribution (Guillemoteau et al., 2017) shows how the measured values are composed of the background resistivities. The task of the LIAG is to reconstruct the conductivities from the measurement data. A robust software, tailored to the routine field application, is to be developed, which generates soil texture maps together with other sensors such as the gamma activity. These then serve as the basis for further management. 
-The TONIA project brings together farmers, agronomists, soil scientists, geophysicists and software developers to tackle socially relevant problems in a practical way.
+## Project Description
 
+Farms exhibit significant variability in soil composition and moisture, leading to uneven nutrient distribution and suboptimal crop yields. Excessive or insufficient fertilization can negatively impact both yield and the environment. The **TONIA project** addresses this by developing soil sensors and 3D soil texture maps that extend to a depth of 150 cm, focusing on soil moisture. This data, combined with yield modeling, generates detailed nutrient maps with a 10x10m resolution. These maps allow for targeted nutrient application, optimizing fertilizer use according to specific soil conditions.
 
-Installation Guide
-To get started with this project, follow the steps below to set up your environment. There are multiple methods to set up the required Python environment, including using Anaconda or installing packages individually with pip. This guide covers both methods.
-Step 1: Installing Python
-Before starting, make sure you have Python installed on your machine. You can install Python in several ways:
-1.	Using Anaconda (Recommended):
-o	Anaconda is a distribution of Python, R, and other tools that simplifies package management and deployment. It's ideal for scientific computing and data science projects.
-o	To install Anaconda, follow the instructions here: Anaconda Installation Guide.
-2.	Using Spyder (Standalone IDE):
-o	Spyder is an open-source Python IDE that comes with Anaconda but can also be installed separately.
-o	To install Spyder, follow the instructions here: Spyder Installation Guide.
-Step 2: Installing Required Libraries
-1.	Installing pyGIMLi:
-o	Follow the installation instructions on the pyGIMLi website using the following link: pyGIMLi Installation Guide.
-2.	Install the required libraries using pip:
-o	Open your terminal (Command Prompt/PowerShell on Windows or Terminal on macOS/Linux) and run the following commands:
-pip install utm
-pip install Fiona
-pip install scipy
-pip install numpy
-pip install pandas
-pip install seaborn
-pip install geopandas
-pip install matplotlib
-pip install scikit-learn
-pip install DateTime
+## Responsibility of LIAG
 
+The **LIAG** (Leibniz Institute for Applied Geophysics) is responsible for evaluating the geoelectric data collected using the **Geophilus Electricus** measuring device. This device measures soil conductivity at various depths, and LIAG's task is to reconstruct these conductivity values into detailed soil texture maps. These maps, along with data from other sensors like gamma activity, provide the foundation for precision nutrient management. The project involves collaboration among farmers, agronomists, soil scientists, geophysicists, and software developers to address practical, socially relevant issues.
 
-Step 3: Verifying the Installation
-After installing all the required packages, it's a good idea to verify that everything is set up correctly. You can do this by running a simple Python script to import the libraries:
+## Installation Guide
+
+To set up your environment for this project, follow the instructions below. You can choose between using **Anaconda** for an integrated environment or installing packages individually with `pip`.
+
+### Step 1: Installing Python
+
+Before starting, ensure that Python is installed on your machine. You have two main options:
+
+1. **Using Anaconda (Recommended):**
+   - Anaconda is a comprehensive distribution of Python and other tools, ideal for scientific and data science applications.
+   - Install Anaconda by following the instructions here: [Anaconda Installation Guide](https://docs.anaconda.com/anaconda/install/).
+
+2. **Using Spyder (Standalone IDE):**
+   - Spyder is an open-source Python IDE that can be installed independently or as part of Anaconda.
+   - Install Spyder by following the instructions here: [Spyder Installation Guide](https://docs.spyder-ide.org/current/installation.html).
+
+### Step 2: Installing Required Libraries
+
+1. **Installing pyGIMLi:**
+   - Follow the specific installation instructions for pyGIMLi on their website: [pyGIMLi Installation Guide](https://www.pygimli.org/installation.html).
+
+2. **Install the Required Libraries using `pip`:**
+   - Open your terminal (Command Prompt/PowerShell on Windows or Terminal on macOS/Linux) and run the following commands:
+
+     ```bash
+     pip install utm
+     pip install Fiona
+     pip install scipy
+     pip install numpy
+     pip install pandas
+     pip install seaborn
+     pip install geopandas
+     pip install matplotlib
+     pip install scikit-learn
+     pip install DateTime
+     ```
+
+### Step 3: Verifying the Installation
+
+After installing all the required packages, it is a good idea to verify that everything is set up correctly. You can do this by running a simple Python script to import the libraries:
+
+```python
 import utm
-import Fiona
+import fiona
 import numpy as np
 import pandas as pd
-import pygimli as pg
 import seaborn as sns
 import geopandas as gpd
 from scipy import interpolate
@@ -53,6 +67,3 @@ from matplotlib.colors import LogNorm
 from sklearn.ensemble import IsolationForest
 
 print("All libraries are installed and imported successfully!")
-
-If this script runs without any errors, your environment is set up correctly.
-
