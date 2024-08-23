@@ -1,3 +1,19 @@
+# TONIA: Sub-Area Differentiated-Optimized Nutrient Management in Arable Farming
+
+## Project Overview
+
+**TONIA** aims to optimize nutrient management in arable farming to achieve environmental benefits and improve crop yields. Traditional farming methods often apply nutrients uniformly across fields, which can result in suboptimal fertilization and environmental contamination. To address this, the TONIA project uses geoelectric measurements to create detailed 3D soil texture maps, helping to tailor nutrient application to specific soil conditions.
+
+## Project Description
+
+Farms exhibit significant variability in soil composition and moisture, leading to uneven nutrient distribution and suboptimal crop yields. Excessive or insufficient fertilization can negatively impact both yield and the environment. The **TONIA project** addresses this by developing soil sensors and 3D soil texture maps that extend to a depth of 150 cm, focusing on soil moisture. This data, combined with yield modeling, generates detailed nutrient maps with a 10x10m resolution. These maps allow for targeted nutrient application, optimizing fertilizer use according to specific soil conditions.
+
+## Responsibility of LIAG
+
+The **LIAG** (Leibniz Institute for Applied Geophysics) is responsible for evaluating the geoelectric data collected using the **Geophilus Electricus** measuring device. This device measures soil conductivity at various depths, and LIAG's task is to reconstruct these conductivity values into detailed soil texture maps. These maps, along with data from other sensors like gamma activity, provide the foundation for precision nutrient management. The project involves collaboration among farmers, agronomists, soil scientists, geophysicists, and software developers to address practical, socially relevant issues.
+
+
+
 # Installation Guide
 
 To get started with this project, follow the steps below to set up your environment. There are multiple methods to set up the required Python environment, including using Anaconda or installing packages individually with pip. This guide covers both methods.
