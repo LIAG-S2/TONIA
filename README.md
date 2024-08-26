@@ -10,7 +10,7 @@ Farms exhibit significant variability in soil composition and moisture, leading 
 
 ## Responsibility of LIAG
 
-The **LIAG** (Leibniz Institute for Applied Geophysics) is responsible for evaluating the geoelectric data collected using the **Geophilus Electricus** measuring device. This device measures soil conductivity at various depths, and LIAG's task is to reconstruct these conductivity values into detailed soil texture maps. These maps, along with data from other sensors like gamma activity, provide the foundation for precision nutrient management. The project involves collaboration among farmers, agronomists, soil scientists, geophysicists, and software developers to address practical, socially relevant issues.
+The **LIAG** (LIAG Institute for Applied Geophysics) is responsible for evaluating the geoelectric data collected using the **Geophilus Electricus** measuring device. This device measures soil conductivity at various depths, and LIAG's task is to reconstruct these conductivity values into detailed soil texture maps. These maps, along with data from other sensors like gamma activity, provide the foundation for precision nutrient management. The project involves collaboration among farmers, agronomists, soil scientists, geophysicists, and software developers to address practical, socially relevant issues.
 
 
 
