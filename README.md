@@ -39,7 +39,6 @@ Before starting, make sure you have Python installed on your machine. You can in
    - Open your terminal (Command Prompt/PowerShell on Windows or Terminal on macOS/Linux) and run the following commands:
 
      ```bash
-     pip install utm
      pip install Fiona
      pip install scipy
      pip install numpy
@@ -56,7 +55,6 @@ Before starting, make sure you have Python installed on your machine. You can in
 After installing all the required packages, it's a good idea to verify that everything is set up correctly. You can do this by running a simple Python script to import the libraries:
 
 ```python
-import utm
 import fiona
 import numpy as np
 import pandas as pd
